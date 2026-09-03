@@ -1,1 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="APTA 2026 exhibitor targeting and conference intelligence demo application."
+    >
+
+    <title>APTA 2026 Team Hub | Northstar Transit Solutions</title>
+
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+
+
+<body>
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="app-header">
+
+        <a
+            href="index.html"
+            class="brand"
+        >
+
+            <div class="brand-mark">
+                NTS
+            </div>
+
+
+            <div class="brand-copy">
+
+                <span>
+                    APTA 2026
+                </span>
+
+                <strong>
+                    Team Hub
+                </strong>
+
+            </div>
+
+        </a>
+
+
+        <nav class="desktop-nav">
+
+            <a
+                href="index.html"
+                class="active"
+            >
+                Dashboard
+            </a>
+
+            <a href="exhibitors.html">
+                Exhibitors
+            </a>
+
+            <a href="map.html">
+                Expo Map
+            </a>
+
+            <a href="targets.html">
+                Targets
+            </a>
+
+            <a href="interactions.html">
+                Interactions
+            </a>
+
+            <a href="leads.html">
+                Leads
+            </a>
+
+        </nav>
+
+
+        <a
+            href="interactions.html"
+            class="header-action"
+        >
+            + Log Interaction
+        </a>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
+
+    <main class="dashboard">
+
+
+        <!-- =================================================
+             DEMO NOTICE
+             ================================================= -->
+
+        <div class="demo-notice">
+            Portfolio Demo · Northstar Transit Solutions is a fictional company
+        </div>
+
+
+
+        <!-- =================================================
+             PAGE HEADING
+             ================================================= -->
+
+        <section class="dashboard-heading">
+
+            <div class="heading-copy">
+
+                <span class="kicker">
+                    APTA TRANSFORM & EXPO 2026
+                </span>
+
+                <h1>
+                    Expo Dashboard
+                </h1>
+
+                <p>
+                    Research exhibitors, coordinate Northstar targets,
+                    track booth coverage, and manage expo conversations
+                    and follow-up from one workspace.
+                </p>
+
+            </div>
+
+
+            <div class="heading-actions">
+
+                <a
+                    href="map.html"
+                    class="button button-secondary"
+                >
+                    Open Floor Map
+                </a>
+
+                <a
+                    href="interactions.html"
+                    class="button button-primary"
+                >
+                    + Log Interaction
+                </a>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             DATABASE STATUS
+             ================================================= -->
+
+        <div
+            id="databaseStatus"
+            class="status-bar"
+        >
+            Demo workspace ready
+        </div>
+
+
+
+        <!-- =================================================
+             METRICS
+             ================================================= -->
+
+        <section class="metrics">
+
+
+            <!-- EXHIBITORS -->
+
+            <a
+                href="exhibitors.html"
+                class="metric"
+            >
+
+                <div class="metric-header">
+
+                    <span class="metric-label">
+                        Exhibitors
+                    </span>
+
+                    <span class="metric-tag">
+                        All
+                    </span>
+
+                </div>
+
+
+                <strong
+                    id="exhibitorCount"
+                    class="metric-number"
+                >
+                    0
+                </strong>
+
+
+                <small>
+                    Companies in directory
+                </small>
+
+            </a>
+
+
+
+            <!-- TARGETS -->
+
+            <a
+                href="targets.html"
+                class="metric target"
+            >
+
+                <div class="metric-header">
+
+                    <span class="metric-label">
+                        Northstar Targets
+                    </span>
+
+                    <span class="metric-tag">
+                        Target
+                    </span>
+
+                </div>
+
+
+                <strong
+                    id="targetCount"
+                    class="metric-number"
+                >
+                    0
+                </strong>
+
+
+                <small>
+                    Selected exhibitors
+                </small>
+
+            </a>
+
+
+
+            <!-- VISITED -->
+
+            <div class="metric visited">
+
+                <div class="metric-header">
+
+                    <span class="metric-label">
+                        Visited
+                    </span>
+
+                    <span class="metric-tag">
+                        Done
+                    </span>
+
+                </div>
+
+
+                <strong
+                    id="visitedCount"
+                    class="metric-number"
+                >
+                    0
+                </strong>
+
+
+                <small>
+                    Target booths completed
+                </small>
+
+            </div>
+
+
+
+            <!-- REMAINING -->
+
+            <div class="metric">
+
+                <div class="metric-header">
+
+                    <span class="metric-label">
+                        Remaining
+                    </span>
+
+                    <span class="metric-tag">
+                        Open
+                    </span>
+
+                </div>
+
+
+                <strong
+                    id="remainingCount"
+                    class="metric-number"
+                >
+                    0
+                </strong>
+
+
+                <small>
+                    Target booths left
+                </small>
+
+            </div>
+
+
+
+            <!-- HOT LEADS -->
+
+            <a
+                href="leads.html"
+                class="metric hot"
+            >
+
+                <div class="metric-header">
+
+                    <span class="metric-label">
+                        Hot Leads
+                    </span>
+
+                    <span class="metric-tag">
+                        Hot
+                    </span>
+
+                </div>
+
+
+                <strong
+                    id="hotLeadCount"
+                    class="metric-number"
+                >
+                    0
+                </strong>
+
+
+                <small>
+                    Priority follow-up
+                </small>
+
+            </a>
+
+        </section>
+
+
+
+        <!-- =================================================
+             MAIN DASHBOARD GRID
+             ================================================= -->
+
+        <section class="main-grid">
+
+
+            <!-- =============================================
+                 PRIORITY TARGETS
+                 ============================================= -->
+
+            <section class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <span class="kicker">
+                            TARGET PIPELINE
+                        </span>
+
+                        <h2>
+                            Priority Exhibitors
+                        </h2>
+
+                    </div>
+
+
+                    <a href="targets.html">
+                        View All
+                    </a>
+
+                </div>
+
+
+                <div class="panel-body">
+
+                    <div class="target-head">
+
+                        <span>
+                            Company
+                        </span>
+
+                        <span>
+                            Booth
+                        </span>
+
+                        <span>
+                            Category
+                        </span>
+
+                        <span>
+                            Status
+                        </span>
+
+                        <span>
+                            Priority
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="priorityTargets"
+                        class="target-list"
+                    >
+
+                        <div class="empty-state">
+
+                            <strong>
+                                No targets selected yet.
+                            </strong>
+
+                            <p>
+                                Browse the exhibitor directory and add
+                                companies to the Northstar target list.
+                            </p>
+
+                            <a
+                                href="exhibitors.html"
+                                class="button button-primary"
+                            >
+                                Browse Exhibitors
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =============================================
+                 EXPO PROGRESS
+                 ============================================= -->
+
+            <aside class="panel progress-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <span class="kicker">
+                            TEAM PROGRESS
+                        </span>
+
+                        <h2>
+                            Expo Coverage
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel-body">
+
+                    <div class="progress-stat">
+
+                        <span>
+                            Booths Visited
+                        </span>
+
+                        <strong id="coveragePercent">
+                            0%
+                        </strong>
+
+                    </div>
+
+
+                    <div class="progress-bar">
+
+                        <div
+                            id="coverageBar"
+                            class="progress-fill"
+                        ></div>
+
+                    </div>
+
+
+                    <div class="progress-details">
+
+                        <div>
+
+                            <span>
+                                Completed
+                            </span>
+
+                            <strong id="progressVisited">
+                                0
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Remaining
+                            </span>
+
+                            <strong id="progressRemaining">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+        </section>
+
+
+
+        <!-- =================================================
+             QUICK TOOLS
+             ================================================= -->
+
+        <section class="quick-section">
+
+            <div class="section-heading">
+
+                <span class="kicker">
+                    QUICK ACCESS
+                </span>
+
+                <h2>
+                    Expo Tools
+                </h2>
+
+            </div>
+
+
+            <div class="quick-tools">
+
+
+                <!-- EXHIBITORS -->
+
+                <a
+                    href="exhibitors.html"
+                    class="quick-tool"
+                >
+
+                    <span class="quick-number">
+                        01
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Exhibitor Directory
+                        </strong>
+
+                        <p>
+                            Search and research every company exhibiting at APTA.
+                        </p>
+
+                    </div>
+
+                    <span class="quick-arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+
+                <!-- MAP -->
+
+                <a
+                    href="map.html"
+                    class="quick-tool"
+                >
+
+                    <span class="quick-number">
+                        02
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Expo Map
+                        </strong>
+
+                        <p>
+                            Locate exhibitors and Northstar targets on the show floor.
+                        </p>
+
+                    </div>
+
+                    <span class="quick-arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+
+                <!-- TARGETS -->
+
+                <a
+                    href="targets.html"
+                    class="quick-tool"
+                >
+
+                    <span class="quick-number">
+                        03
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Target Pipeline
+                        </strong>
+
+                        <p>
+                            Manage priorities, booth visits, assignments,
+                            and follow-up.
+                        </p>
+
+                    </div>
+
+                    <span class="quick-arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+
+                <!-- INTERACTIONS -->
+
+                <a
+                    href="interactions.html"
+                    class="quick-tool"
+                >
+
+                    <span class="quick-number">
+                        04
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Interactions
+                        </strong>
+
+                        <p>
+                            Capture conversations, contacts,
+                            notes, and next steps.
+                        </p>
+
+                    </div>
+
+                    <span class="quick-arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+
+                <!-- LEADS -->
+
+                <a
+                    href="leads.html"
+                    class="quick-tool"
+                >
+
+                    <span class="quick-number">
+                        05
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Lead Pipeline
+                        </strong>
+
+                        <p>
+                            Turn promising expo conversations
+                            into structured opportunities.
+                        </p>
+
+                    </div>
+
+                    <span class="quick-arrow">
+                        →
+                    </span>
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         MOBILE NAVIGATION
+         ===================================================== -->
+
+    <nav class="mobile-nav">
+
+        <a
+            href="index.html"
+            class="active"
+        >
+
+            <span>
+                ◫
+            </span>
+
+            Dashboard
+
+        </a>
+
+
+        <a href="exhibitors.html">
+
+            <span>
+                ⌕
+            </span>
+
+            Exhibitors
+
+        </a>
+
+
+        <a
+            href="interactions.html"
+            class="mobile-add"
+        >
+
+            <strong>
+                +
+            </strong>
+
+            <small>
+                Log
+            </small>
+
+        </a>
+
+
+        <a href="targets.html">
+
+            <span>
+                ◎
+            </span>
+
+            Targets
+
+        </a>
+
+
+        <a href="leads.html">
+
+            <span>
+                ↗
+            </span>
+
+            Leads
+
+        </a>
+
+    </nav>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+         ===================================================== -->
+
+    <script src="js/config.js"></script>
+    <script src="js/dashboard.js"></script>
+
+</body>
+
+</html>
