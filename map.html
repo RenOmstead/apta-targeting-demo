@@ -11,13 +11,20 @@
 
     <meta
         name="description"
-        content="Interactive APTA 2026 expo map and exhibitor targeting workspace."
+        content="Interactive APTA 2026 expo floor map and exhibitor targeting workspace."
     >
 
     <title>Expo Map | APTA 2026 Team Hub</title>
 
-    <link rel="stylesheet" href="css/global.css">
-    <link rel="stylesheet" href="css/map.css">
+    <link
+        rel="stylesheet"
+        href="css/global.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/map.css"
+    >
 </head>
 
 
@@ -97,7 +104,7 @@
 
 
     <!-- =====================================================
-         MAIN
+         MAIN PAGE
          ===================================================== -->
 
     <main class="map-page">
@@ -122,18 +129,18 @@
             <div class="heading-copy">
 
                 <span class="kicker">
-                    LIVE EXPO NAVIGATION
+                    APTA TRANSFORM & EXPO 2026
                 </span>
 
                 <h1>
-                    Know exactly
-                    where to go next.
+                    Navigate the floor
+                    with intention.
                 </h1>
 
                 <p>
-                    Search the show floor, locate exhibitors, identify
-                    Northstar targets, and move directly from research
-                    to booth conversations.
+                    Explore exhibitor booths by location, identify priority
+                    companies, and move directly from conference research
+                    to meaningful conversations.
                 </p>
 
             </div>
@@ -186,14 +193,14 @@
 
 
         <!-- =================================================
-             STATUS
+             STATUS BAR
              ================================================= -->
 
         <div
             id="databaseStatus"
             class="status-bar"
         >
-            Demo workspace ready
+            Loading expo floor...
         </div>
 
 
@@ -214,7 +221,7 @@
                     id="mapSearch"
                     type="search"
                     autocomplete="off"
-                    placeholder="Search company, booth, category or keyword..."
+                    placeholder="Search company, booth number, category or keyword..."
                 >
 
             </div>
@@ -222,7 +229,7 @@
 
             <select
                 id="mapTargetFilter"
-                aria-label="Filter map targets"
+                aria-label="Filter exhibitors by target status"
             >
 
                 <option value="">
@@ -230,7 +237,7 @@
                 </option>
 
                 <option value="targets">
-                    Northstar Targets Only
+                    Northstar Targets
                 </option>
 
                 <option value="not-targets">
@@ -242,7 +249,7 @@
 
             <select
                 id="mapCategoryFilter"
-                aria-label="Filter map category"
+                aria-label="Filter exhibitors by category"
             >
 
                 <option value="">
@@ -265,28 +272,28 @@
 
 
         <!-- =================================================
-             MAP WORKSPACE
+             WORKSPACE
              ================================================= -->
 
         <section class="map-workspace">
 
 
             <!-- =============================================
-                 FLOOR MAP
+                 FLOOR PLAN
                  ============================================= -->
 
-            <section class="map-panel">
+            <section class="floor-panel">
 
-                <div class="map-panel-header">
+                <div class="floor-panel-header">
 
                     <div>
 
                         <span class="kicker">
-                            APTA EXPO FLOOR
+                            EXHIBITION FLOOR
                         </span>
 
                         <h2>
-                            Exhibitor Map
+                            Interactive Floor Plan
                         </h2>
 
                     </div>
@@ -294,20 +301,29 @@
 
                     <div class="map-legend">
 
-                        <span class="legend-item">
+                        <span>
 
-                            <i class="legend-dot exhibitor-dot"></i>
+                            <i class="legend-box standard"></i>
 
                             Exhibitor
 
                         </span>
 
 
-                        <span class="legend-item">
+                        <span>
 
-                            <i class="legend-dot target-dot"></i>
+                            <i class="legend-box target"></i>
 
                             Northstar Target
+
+                        </span>
+
+
+                        <span>
+
+                            <i class="legend-box selected"></i>
+
+                            Selected
 
                         </span>
 
@@ -316,42 +332,39 @@
                 </div>
 
 
-                <div
-                    id="expoMap"
-                    class="expo-map"
-                >
 
-                    <!--
-                        For now this will become our
-                        demo floor-map workspace.
+                <!-- =========================================
+                     MAP VIEWPORT
+                     ========================================= -->
 
-                        Later:
-                        real APTA booth positions / floor plan
-                        can render here.
-                    -->
+                <div class="floor-scroll">
 
+                    <div
+                        id="expoFloor"
+                        class="expo-floor"
+                    >
 
-                    <div class="map-placeholder">
-
-                        <span class="map-placeholder-number">
-                            2026
-                        </span>
-
-                        <div>
-
-                            <strong>
-                                APTA Expo Floor
-                            </strong>
-
-                            <p>
-                                Exhibitor locations will appear here.
-                                Search for a company or select a target
-                                to highlight its booth.
-                            </p>
-
-                        </div>
+                        <!-- generated by map.js -->
 
                     </div>
+
+                </div>
+
+
+
+                <!-- =========================================
+                     MAP FOOTER
+                     ========================================= -->
+
+                <div class="floor-footer">
+
+                    <span>
+                        Booth dimensions shown proportionally
+                    </span>
+
+                    <span>
+                        Portfolio reconstruction · Not official APTA floor plan
+                    </span>
 
                 </div>
 
@@ -360,41 +373,53 @@
 
 
             <!-- =============================================
-                 MAP SIDEBAR
+                 SIDEBAR
                  ============================================= -->
 
             <aside class="map-sidebar">
 
 
-                <!-- SELECTED EXHIBITOR -->
+                <!-- =========================================
+                     SELECTED EXHIBITOR
+                     ========================================= -->
 
-                <section class="map-sidebar-section">
+                <section class="sidebar-panel">
 
-                    <div class="sidebar-heading">
+                    <div class="sidebar-header">
 
-                        <span class="kicker">
-                            SELECTED
-                        </span>
+                        <div>
 
-                        <h2>
-                            Exhibitor
-                        </h2>
+                            <span class="kicker">
+                                SELECTED BOOTH
+                            </span>
+
+                            <h2>
+                                Exhibitor Intelligence
+                            </h2>
+
+                        </div>
 
                     </div>
 
 
+
                     <div
-                        id="mapSelectedEmpty"
+                        id="selectedEmpty"
                         class="selected-empty"
                     >
 
+                        <span class="selected-empty-number">
+                            +
+                        </span>
+
                         <strong>
-                            Nothing selected yet.
+                            Select a booth
                         </strong>
 
                         <p>
-                            Search for an exhibitor or select
-                            a booth on the map.
+                            Click any booth on the floor to view
+                            the exhibitor, booth dimensions, research
+                            status and available actions.
                         </p>
 
                     </div>
@@ -402,12 +427,12 @@
 
 
                     <div
-                        id="mapSelectedCard"
+                        id="selectedCard"
                         class="selected-card"
                         hidden
                     >
 
-                        <div class="selected-card-top">
+                        <div class="selected-top">
 
                             <div
                                 id="selectedCompanyMark"
@@ -419,7 +444,7 @@
 
                             <span
                                 id="selectedTargetBadge"
-                                class="selected-target-badge"
+                                class="target-badge"
                                 hidden
                             >
                                 Northstar Target
@@ -437,19 +462,50 @@
 
 
                         <h3 id="selectedCompany">
-                            Company Name
+                            Company
                         </h3>
 
 
-                        <div class="selected-booth">
 
-                            <span>
-                                Booth
-                            </span>
+                        <div class="booth-intelligence">
 
-                            <strong id="selectedBooth">
-                                —
-                            </strong>
+                            <div>
+
+                                <span>
+                                    Booth
+                                </span>
+
+                                <strong id="selectedBooth">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Size
+                                </span>
+
+                                <strong id="selectedSize">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Area
+                                </span>
+
+                                <strong id="selectedSqFt">
+                                    —
+                                </strong>
+
+                            </div>
 
                         </div>
 
@@ -458,19 +514,27 @@
                             id="selectedDescription"
                             class="selected-description"
                         >
-                            Company description.
+                            Exhibitor description.
                         </p>
+
 
 
                         <div class="selected-actions">
 
                             <a
                                 id="selectedProfileLink"
-                                href="exhibitors.html"
                                 class="sidebar-action"
+                                href="exhibitors.html"
                             >
-                                View Profile
-                                <span>→</span>
+
+                                <span>
+                                    View Exhibitor Profile
+                                </span>
+
+                                <b>
+                                    →
+                                </b>
+
                             </a>
 
 
@@ -479,18 +543,32 @@
                                 class="sidebar-action target-action"
                                 type="button"
                             >
-                                Add Target
-                                <span>+</span>
+
+                                <span>
+                                    Add to Northstar Targets
+                                </span>
+
+                                <b>
+                                    +
+                                </b>
+
                             </button>
 
 
                             <a
                                 id="selectedInteractionLink"
-                                href="interactions.html"
                                 class="sidebar-action"
+                                href="interactions.html"
                             >
-                                Log Interaction
-                                <span>→</span>
+
+                                <span>
+                                    Log Interaction
+                                </span>
+
+                                <b>
+                                    →
+                                </b>
+
                             </a>
 
                         </div>
@@ -501,29 +579,43 @@
 
 
 
-                <!-- TARGET ROUTE -->
+                <!-- =========================================
+                     TARGET ROUTE
+                     ========================================= -->
 
-                <section class="map-sidebar-section">
+                <section class="sidebar-panel target-route-panel">
 
-                    <div class="sidebar-heading">
+                    <div class="sidebar-header">
 
-                        <span class="kicker">
-                            PRIORITY ROUTE
+                        <div>
+
+                            <span class="kicker">
+                                PRIORITY ROUTE
+                            </span>
+
+                            <h2>
+                                Target Booths
+                            </h2>
+
+                        </div>
+
+
+                        <span
+                            id="targetRouteCount"
+                            class="sidebar-count"
+                        >
+                            0
                         </span>
-
-                        <h2>
-                            Target Booths
-                        </h2>
 
                     </div>
 
 
                     <div
-                        id="mapTargetList"
-                        class="map-target-list"
+                        id="targetRouteList"
+                        class="target-route-list"
                     >
 
-                        <div class="target-list-empty">
+                        <div class="route-empty">
 
                             No Northstar targets selected yet.
 
@@ -542,7 +634,44 @@
 
 
     <!-- =====================================================
-         MOBILE NAVIGATION
+         BOOTH HOVER CARD
+         ===================================================== -->
+
+    <div
+        id="boothTooltip"
+        class="booth-tooltip"
+        hidden
+    >
+
+        <span
+            id="tooltipStatus"
+            class="tooltip-status"
+        >
+            EXHIBITOR
+        </span>
+
+        <strong id="tooltipCompany">
+            Company
+        </strong>
+
+        <div>
+
+            <span id="tooltipBooth">
+                Booth —
+            </span>
+
+            <span id="tooltipSize">
+                —
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MOBILE NAV
          ===================================================== -->
 
     <nav class="mobile-nav">
@@ -618,6 +747,7 @@
          ===================================================== -->
 
     <script src="js/config.js"></script>
+
     <script src="js/map.js"></script>
 
 </body>
