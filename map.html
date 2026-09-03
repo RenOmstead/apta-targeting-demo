@@ -1,1 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Interactive APTA 2026 expo map and exhibitor targeting workspace."
+    >
+
+    <title>Expo Map | APTA 2026 Team Hub</title>
+
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/map.css">
+</head>
+
+
+<body>
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="app-header">
+
+        <a
+            href="index.html"
+            class="brand"
+        >
+
+            <div class="brand-mark">
+                NTS
+            </div>
+
+            <div class="brand-copy">
+
+                <span>
+                    APTA 2026
+                </span>
+
+                <strong>
+                    Team Hub
+                </strong>
+
+            </div>
+
+        </a>
+
+
+        <nav class="desktop-nav">
+
+            <a href="index.html">
+                Dashboard
+            </a>
+
+            <a href="exhibitors.html">
+                Exhibitors
+            </a>
+
+            <a
+                href="map.html"
+                class="active"
+            >
+                Expo Map
+            </a>
+
+            <a href="targets.html">
+                Targets
+            </a>
+
+            <a href="interactions.html">
+                Interactions
+            </a>
+
+            <a href="leads.html">
+                Leads
+            </a>
+
+        </nav>
+
+
+        <a
+            href="interactions.html"
+            class="header-action"
+        >
+            + Log Interaction
+        </a>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
+
+    <main class="map-page">
+
+
+        <!-- =================================================
+             DEMO NOTICE
+             ================================================= -->
+
+        <div class="demo-notice">
+            Portfolio Demo · Northstar Transit Solutions is a fictional company
+        </div>
+
+
+
+        <!-- =================================================
+             PAGE HEADING
+             ================================================= -->
+
+        <section class="page-heading">
+
+            <div class="heading-copy">
+
+                <span class="kicker">
+                    LIVE EXPO NAVIGATION
+                </span>
+
+                <h1>
+                    Know exactly
+                    where to go next.
+                </h1>
+
+                <p>
+                    Search the show floor, locate exhibitors, identify
+                    Northstar targets, and move directly from research
+                    to booth conversations.
+                </p>
+
+            </div>
+
+
+            <div class="map-summary">
+
+                <div>
+
+                    <span>
+                        Exhibitors
+                    </span>
+
+                    <strong id="mapExhibitorCount">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Targets
+                    </span>
+
+                    <strong id="mapTargetCount">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Visible
+                    </span>
+
+                    <strong id="mapVisibleCount">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             STATUS
+             ================================================= -->
+
+        <div
+            id="databaseStatus"
+            class="status-bar"
+        >
+            Demo workspace ready
+        </div>
+
+
+
+        <!-- =================================================
+             MAP TOOLBAR
+             ================================================= -->
+
+        <section class="map-toolbar">
+
+            <div class="map-search">
+
+                <span>
+                    ⌕
+                </span>
+
+                <input
+                    id="mapSearch"
+                    type="search"
+                    autocomplete="off"
+                    placeholder="Search company, booth, category or keyword..."
+                >
+
+            </div>
+
+
+            <select
+                id="mapTargetFilter"
+                aria-label="Filter map targets"
+            >
+
+                <option value="">
+                    All Exhibitors
+                </option>
+
+                <option value="targets">
+                    Northstar Targets Only
+                </option>
+
+                <option value="not-targets">
+                    Non-Targets
+                </option>
+
+            </select>
+
+
+            <select
+                id="mapCategoryFilter"
+                aria-label="Filter map category"
+            >
+
+                <option value="">
+                    All Categories
+                </option>
+
+            </select>
+
+
+            <button
+                id="resetMapButton"
+                class="map-reset"
+                type="button"
+            >
+                Reset View
+            </button>
+
+        </section>
+
+
+
+        <!-- =================================================
+             MAP WORKSPACE
+             ================================================= -->
+
+        <section class="map-workspace">
+
+
+            <!-- =============================================
+                 FLOOR MAP
+                 ============================================= -->
+
+            <section class="map-panel">
+
+                <div class="map-panel-header">
+
+                    <div>
+
+                        <span class="kicker">
+                            APTA EXPO FLOOR
+                        </span>
+
+                        <h2>
+                            Exhibitor Map
+                        </h2>
+
+                    </div>
+
+
+                    <div class="map-legend">
+
+                        <span class="legend-item">
+
+                            <i class="legend-dot exhibitor-dot"></i>
+
+                            Exhibitor
+
+                        </span>
+
+
+                        <span class="legend-item">
+
+                            <i class="legend-dot target-dot"></i>
+
+                            Northstar Target
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="expoMap"
+                    class="expo-map"
+                >
+
+                    <!--
+                        For now this will become our
+                        demo floor-map workspace.
+
+                        Later:
+                        real APTA booth positions / floor plan
+                        can render here.
+                    -->
+
+
+                    <div class="map-placeholder">
+
+                        <span class="map-placeholder-number">
+                            2026
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                APTA Expo Floor
+                            </strong>
+
+                            <p>
+                                Exhibitor locations will appear here.
+                                Search for a company or select a target
+                                to highlight its booth.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =============================================
+                 MAP SIDEBAR
+                 ============================================= -->
+
+            <aside class="map-sidebar">
+
+
+                <!-- SELECTED EXHIBITOR -->
+
+                <section class="map-sidebar-section">
+
+                    <div class="sidebar-heading">
+
+                        <span class="kicker">
+                            SELECTED
+                        </span>
+
+                        <h2>
+                            Exhibitor
+                        </h2>
+
+                    </div>
+
+
+                    <div
+                        id="mapSelectedEmpty"
+                        class="selected-empty"
+                    >
+
+                        <strong>
+                            Nothing selected yet.
+                        </strong>
+
+                        <p>
+                            Search for an exhibitor or select
+                            a booth on the map.
+                        </p>
+
+                    </div>
+
+
+
+                    <div
+                        id="mapSelectedCard"
+                        class="selected-card"
+                        hidden
+                    >
+
+                        <div class="selected-card-top">
+
+                            <div
+                                id="selectedCompanyMark"
+                                class="selected-company-mark"
+                            >
+                                N
+                            </div>
+
+
+                            <span
+                                id="selectedTargetBadge"
+                                class="selected-target-badge"
+                                hidden
+                            >
+                                Northstar Target
+                            </span>
+
+                        </div>
+
+
+                        <span
+                            id="selectedCategory"
+                            class="selected-category"
+                        >
+                            Category
+                        </span>
+
+
+                        <h3 id="selectedCompany">
+                            Company Name
+                        </h3>
+
+
+                        <div class="selected-booth">
+
+                            <span>
+                                Booth
+                            </span>
+
+                            <strong id="selectedBooth">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <p
+                            id="selectedDescription"
+                            class="selected-description"
+                        >
+                            Company description.
+                        </p>
+
+
+                        <div class="selected-actions">
+
+                            <a
+                                id="selectedProfileLink"
+                                href="exhibitors.html"
+                                class="sidebar-action"
+                            >
+                                View Profile
+                                <span>→</span>
+                            </a>
+
+
+                            <button
+                                id="selectedTargetButton"
+                                class="sidebar-action target-action"
+                                type="button"
+                            >
+                                Add Target
+                                <span>+</span>
+                            </button>
+
+
+                            <a
+                                id="selectedInteractionLink"
+                                href="interactions.html"
+                                class="sidebar-action"
+                            >
+                                Log Interaction
+                                <span>→</span>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- TARGET ROUTE -->
+
+                <section class="map-sidebar-section">
+
+                    <div class="sidebar-heading">
+
+                        <span class="kicker">
+                            PRIORITY ROUTE
+                        </span>
+
+                        <h2>
+                            Target Booths
+                        </h2>
+
+                    </div>
+
+
+                    <div
+                        id="mapTargetList"
+                        class="map-target-list"
+                    >
+
+                        <div class="target-list-empty">
+
+                            No Northstar targets selected yet.
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </aside>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         MOBILE NAVIGATION
+         ===================================================== -->
+
+    <nav class="mobile-nav">
+
+        <a href="index.html">
+
+            <span>
+                ◫
+            </span>
+
+            Dashboard
+
+        </a>
+
+
+        <a href="exhibitors.html">
+
+            <span>
+                ⌕
+            </span>
+
+            Exhibitors
+
+        </a>
+
+
+        <a
+            href="interactions.html"
+            class="mobile-add"
+        >
+
+            <strong>
+                +
+            </strong>
+
+            <small>
+                Log
+            </small>
+
+        </a>
+
+
+        <a
+            href="map.html"
+            class="active"
+        >
+
+            <span>
+                ◇
+            </span>
+
+            Map
+
+        </a>
+
+
+        <a href="targets.html">
+
+            <span>
+                ◎
+            </span>
+
+            Targets
+
+        </a>
+
+    </nav>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+         ===================================================== -->
+
+    <script src="js/config.js"></script>
+    <script src="js/map.js"></script>
+
+</body>
+
+</html>
