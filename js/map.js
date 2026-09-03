@@ -2,15 +2,1168 @@
    APTA 2026 TEAM HUB
    NORTHSTAR TRANSIT SOLUTIONS
 
-   EXPO FLOOR ENGINE
+   INTERACTIVE EXPO FLOOR
    ========================================================= */
 
+
+/* =========================================================
+   FLOOR CONFIGURATION
+
+   1 grid unit = 10 physical feet
+   ========================================================= */
+
+const FLOOR_CONFIG = {
+
+    unitFeet: 10,
+
+    unitPixels: 34,
+
+    widthUnits: 48,
+
+    heightUnits: 39
+
+};
+
+
+
+/* =========================================================
+   STATE
+   ========================================================= */
 
 let exhibitors = [];
 
 let selectedExhibitor = null;
 
 let visibleBoothCount = 0;
+
+
+
+/* =========================================================
+   FLOOR STRUCTURE
+   ========================================================= */
+
+const FLOOR_ZONES = [
+
+    {
+        id: "north",
+        label: "NORTH EXHIBIT AREA",
+        x: 2,
+        y: 1,
+        width: 40,
+        height: 8
+    },
+
+    {
+        id: "center",
+        label: "CENTRAL EXHIBIT AREA",
+        x: 1,
+        y: 10,
+        width: 44,
+        height: 17
+    },
+
+    {
+        id: "south",
+        label: "SOUTH EXHIBIT AREA",
+        x: 2,
+        y: 29,
+        width: 41,
+        height: 8
+    }
+
+];
+
+
+
+/* =========================================================
+   AISLES
+   ========================================================= */
+
+const FLOOR_AISLES = [
+
+    {
+        label: "MAIN CROSS AISLE",
+        x: 1,
+        y: 9,
+        width: 44,
+        height: 1
+    },
+
+    {
+        label: "CENTRAL CROSS AISLE",
+        x: 1,
+        y: 27,
+        width: 44,
+        height: 2
+    },
+
+    {
+        label: "WEST ENTRY",
+        x: 0,
+        y: 12,
+        width: 2,
+        height: 8
+    }
+
+];
+
+
+
+/* =========================================================
+   FLOOR LAYOUT
+
+   width / depth are 10-foot modules.
+
+   Example:
+   width: 1, depth: 1
+   = 10' × 10'
+
+   width: 3, depth: 1
+   = 30' × 10'
+   ========================================================= */
+
+const APTA_FLOOR_LAYOUT = [
+
+    /* ===================== 3100 AREA ===================== */
+
+    {
+        booth_number: "3175",
+        x: 11,
+        y: 4,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "3176",
+        x: 12,
+        y: 4,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "3181",
+        x: 14,
+        y: 4,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "3182",
+        x: 15,
+        y: 4,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "3185",
+        x: 17,
+        y: 4,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "3186",
+        x: 18,
+        y: 4,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "3100",
+        x: 20,
+        y: 2,
+        width: 4,
+        depth: 3
+    },
+
+    {
+        booth_number: "3103",
+        x: 25,
+        y: 3,
+        width: 2,
+        depth: 2
+    },
+
+    {
+        booth_number: "3106",
+        x: 28,
+        y: 4,
+        width: 2,
+        depth: 1
+    },
+
+
+    /* ===================== 3400 AREA ===================== */
+
+    {
+        booth_number: "3402",
+        x: 12,
+        y: 12,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "3405",
+        x: 13,
+        y: 12,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "3406",
+        x: 14,
+        y: 12,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "3408",
+        x: 15,
+        y: 12,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "3420",
+        x: 18,
+        y: 11,
+        width: 3,
+        depth: 2
+    },
+
+    {
+        booth_number: "3425",
+        x: 22,
+        y: 12,
+        width: 2,
+        depth: 1
+    },
+
+
+    /* ===================== CENTER AREA =================== */
+
+    {
+        booth_number: "3500",
+        x: 5,
+        y: 15,
+        width: 4,
+        depth: 3
+    },
+
+    {
+        booth_number: "3600",
+        x: 11,
+        y: 15,
+        width: 3,
+        depth: 4
+    },
+
+    {
+        booth_number: "3700",
+        x: 16,
+        y: 15,
+        width: 5,
+        depth: 3
+    },
+
+    {
+        booth_number: "3800",
+        x: 24,
+        y: 15,
+        width: 4,
+        depth: 4
+    },
+
+    {
+        booth_number: "3900",
+        x: 31,
+        y: 15,
+        width: 5,
+        depth: 3
+    },
+
+
+    /* ===================== 4200 AREA ===================== */
+
+    {
+        booth_number: "4210",
+        x: 30,
+        y: 20,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4212",
+        x: 31,
+        y: 20,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4217",
+        x: 33,
+        y: 20,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4220",
+        x: 35,
+        y: 20,
+        width: 2,
+        depth: 1
+    },
+
+    {
+        booth_number: "4231",
+        x: 38,
+        y: 20,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4234",
+        x: 39,
+        y: 20,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4237",
+        x: 40,
+        y: 20,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4239",
+        x: 41,
+        y: 20,
+        width: 1,
+        depth: 1
+    },
+
+
+    {
+        booth_number: "4252",
+        x: 30,
+        y: 22,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4255",
+        x: 32,
+        y: 22,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4257",
+        x: 33,
+        y: 22,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4261",
+        x: 35,
+        y: 22,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4264",
+        x: 36,
+        y: 22,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4267",
+        x: 38,
+        y: 22,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4269",
+        x: 39,
+        y: 22,
+        width: 1,
+        depth: 1
+    },
+
+
+    {
+        booth_number: "4274",
+        x: 30,
+        y: 24,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4275",
+        x: 31,
+        y: 24,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4277",
+        x: 33,
+        y: 24,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4279",
+        x: 34,
+        y: 24,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4281",
+        x: 36,
+        y: 24,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4285",
+        x: 38,
+        y: 24,
+        width: 1,
+        depth: 1
+    },
+
+
+    /* ===================== 4600 AREA ===================== */
+
+    {
+        booth_number: "4606",
+        x: 30,
+        y: 31,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4607",
+        x: 31,
+        y: 31,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4608",
+        x: 32,
+        y: 31,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4610",
+        x: 34,
+        y: 31,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4612",
+        x: 35,
+        y: 31,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4614",
+        x: 37,
+        y: 31,
+
+        /* VERIFIED 30 × 10 */
+
+        width: 3,
+        depth: 1
+    },
+
+    {
+        booth_number: "4617",
+        x: 41,
+        y: 31,
+        width: 1,
+        depth: 1
+    },
+
+
+    {
+        booth_number: "4620",
+        x: 30,
+        y: 33,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4622",
+        x: 31,
+        y: 33,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4624",
+        x: 32,
+        y: 33,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4625",
+        x: 34,
+        y: 33,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4627",
+        x: 35,
+        y: 33,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4628",
+        x: 36,
+        y: 33,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4631",
+        x: 38,
+        y: 33,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4632",
+        x: 39,
+        y: 33,
+        width: 1,
+        depth: 1
+    },
+
+
+    {
+        booth_number: "4636",
+        x: 30,
+        y: 35,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4638",
+        x: 32,
+        y: 35,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4642",
+        x: 34,
+        y: 35,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4644",
+        x: 35,
+        y: 35,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4646",
+        x: 36,
+        y: 35,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4647",
+        x: 38,
+        y: 35,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4648",
+        x: 39,
+        y: 35,
+        width: 1,
+        depth: 1
+    },
+
+    {
+        booth_number: "4649",
+        x: 40,
+        y: 35,
+        width: 1,
+        depth: 1
+    }
+
+];
+
+
+
+/* =========================================================
+   EXHIBITOR DIRECTORY
+   ========================================================= */
+
+const APTA_EXHIBITORS = [
+
+    {
+        id: "3175",
+        company_name: "Token Transit",
+        booth_number: "3175",
+        category: "Fare Collection"
+    },
+
+    {
+        id: "3176",
+        company_name: "Xcalliber",
+        booth_number: "3176",
+        category: "Technology"
+    },
+
+    {
+        id: "3181",
+        company_name: "LYT",
+        booth_number: "3181",
+        category: "Transit Technology"
+    },
+
+    {
+        id: "3182",
+        company_name:
+            "Propane Education & Research Council",
+        booth_number: "3182",
+        category: "Alternative Fuels"
+    },
+
+    {
+        id: "3185",
+        company_name: "LPA Group Plc",
+        booth_number: "3185",
+        category: "Transit Technology"
+    },
+
+    {
+        id: "3186",
+        company_name: "APTA Exhibitor",
+        booth_number: "3186",
+        category: "Exhibitor"
+    },
+
+    {
+        id: "3100",
+        company_name: "BAE Systems",
+        booth_number: "3100",
+        category: "Vehicle Systems"
+    },
+
+    {
+        id: "3103",
+        company_name:
+            "Brookville Equipment Corporation",
+        booth_number: "3103",
+        category: "Rolling Stock"
+    },
+
+    {
+        id: "3106",
+        company_name: "ROUSH CleanTech",
+        booth_number: "3106",
+        category: "Clean Transportation"
+    },
+
+
+    {
+        id: "3402",
+        company_name:
+            "Global Display Solutions",
+        booth_number: "3402",
+        category: "Passenger Systems"
+    },
+
+    {
+        id: "3405",
+        company_name:
+            "Advanced Rail Systems",
+        booth_number: "3405",
+        category: "Rail Technology"
+    },
+
+    {
+        id: "3406",
+        company_name:
+            "Fraenkische Industrial Pipes",
+        booth_number: "3406",
+        category: "Components"
+    },
+
+    {
+        id: "3408",
+        company_name: "REI",
+        booth_number: "3408",
+        category: "Transit Technology"
+    },
+
+    {
+        id: "3420",
+        company_name:
+            "Kawasaki Rail Car Inc.",
+        booth_number: "3420",
+        category: "Rolling Stock"
+    },
+
+    {
+        id: "3425",
+        company_name:
+            "Scheidt & Bachmann",
+        booth_number: "3425",
+        category: "Fare Collection"
+    },
+
+
+    {
+        id: "3500",
+        company_name:
+            "North Hall Exhibitor",
+        booth_number: "3500",
+        category: "Transit Industry"
+    },
+
+    {
+        id: "3600",
+        company_name:
+            "Central Island Exhibitor",
+        booth_number: "3600",
+        category: "Transit Industry"
+    },
+
+    {
+        id: "3700",
+        company_name:
+            "Mobility Pavilion",
+        booth_number: "3700",
+        category: "Mobility"
+    },
+
+    {
+        id: "3800",
+        company_name:
+            "Transit Technology Pavilion",
+        booth_number: "3800",
+        category: "Technology"
+    },
+
+    {
+        id: "3900",
+        company_name:
+            "Rail Systems Pavilion",
+        booth_number: "3900",
+        category: "Rail Technology"
+    },
+
+
+    {
+        id: "4210",
+        company_name: "LockNClimb, LLC",
+        booth_number: "4210",
+        category: "Equipment"
+    },
+
+    {
+        id: "4212",
+        company_name: "Kuba",
+        booth_number: "4212",
+        category: "Fare Collection"
+    },
+
+    {
+        id: "4217",
+        company_name: "BBA Project, Inc.",
+        booth_number: "4217",
+        category: "Consulting"
+    },
+
+    {
+        id: "4220",
+        company_name: "May Mobility",
+        booth_number: "4220",
+        category: "Mobility"
+    },
+
+    {
+        id: "4231",
+        company_name:
+            "Tolar Manufacturing Company",
+        booth_number: "4231",
+        category: "Transit Equipment"
+    },
+
+    {
+        id: "4234",
+        company_name:
+            "Michael Baker International",
+        booth_number: "4234",
+        category: "Engineering"
+    },
+
+    {
+        id: "4237",
+        company_name:
+            "FLEETWATCH",
+        booth_number: "4237",
+        category: "Fleet Technology"
+    },
+
+    {
+        id: "4239",
+        company_name:
+            "A Customer's Point of View",
+        booth_number: "4239",
+        category: "Consulting"
+    },
+
+    {
+        id: "4252",
+        company_name: "Delta-Danobat",
+        booth_number: "4252",
+        category: "Rail Equipment"
+    },
+
+    {
+        id: "4255",
+        company_name:
+            "The Routing Company",
+        booth_number: "4255",
+        category: "Mobility Technology"
+    },
+
+    {
+        id: "4257",
+        company_name:
+            "NATSCO",
+        booth_number: "4257",
+        category: "Manufacturing"
+    },
+
+    {
+        id: "4261",
+        company_name: "Pro-Flex Inc.",
+        booth_number: "4261",
+        category: "Components"
+    },
+
+    {
+        id: "4264",
+        company_name:
+            "WOW Brand Products",
+        booth_number: "4264",
+        category: "Transit Products"
+    },
+
+    {
+        id: "4267",
+        company_name: "Ofolux S.R.L.",
+        booth_number: "4267",
+        category: "Vehicle Systems"
+    },
+
+    {
+        id: "4269",
+        company_name: "SignAgent",
+        booth_number: "4269",
+        category: "Passenger Information"
+    },
+
+    {
+        id: "4274",
+        company_name:
+            "Strive Transit Ambassadors",
+        booth_number: "4274",
+        category: "Transit Services"
+    },
+
+    {
+        id: "4275",
+        company_name: "RideShark",
+        booth_number: "4275",
+        category: "Mobility Technology"
+    },
+
+    {
+        id: "4277",
+        company_name: "Bridgestone",
+        booth_number: "4277",
+        category: "Vehicle Components"
+    },
+
+    {
+        id: "4279",
+        company_name: "APTA Exhibitor",
+        booth_number: "4279",
+        category: "Exhibitor"
+    },
+
+    {
+        id: "4281",
+        company_name:
+            "PureTech Systems",
+        booth_number: "4281",
+        category: "Security Technology"
+    },
+
+    {
+        id: "4285",
+        company_name:
+            "Xiamen Magnetic North Technology",
+        booth_number: "4285",
+        category: "Transit Technology"
+    },
+
+
+    {
+        id: "4606",
+        company_name:
+            "Advantage Manufacturing",
+        booth_number: "4606",
+        category: "Manufacturing"
+    },
+
+    {
+        id: "4607",
+        company_name:
+            "Acorn Wire & Iron Works",
+        booth_number: "4607",
+        category: "Manufacturing"
+    },
+
+    {
+        id: "4608",
+        company_name:
+            "Whiting Door Manufacturing",
+        booth_number: "4608",
+        category: "Vehicle Components"
+    },
+
+    {
+        id: "4610",
+        company_name:
+            "Common Pixels",
+        booth_number: "4610",
+        category: "Technology"
+    },
+
+    {
+        id: "4612",
+        company_name:
+            "PowerPusher",
+        booth_number: "4612",
+        category: "Equipment"
+    },
+
+    {
+        id: "4614",
+        company_name:
+            "APTA Exhibitor",
+        booth_number: "4614",
+        category: "Exhibitor"
+    },
+
+    {
+        id: "4617",
+        company_name:
+            "r2p USA Inc.",
+        booth_number: "4617",
+        category: "Transit Technology"
+    },
+
+    {
+        id: "4620",
+        company_name:
+            "S. Sterling Company",
+        booth_number: "4620",
+        category: "Transit Products"
+    },
+
+    {
+        id: "4622",
+        company_name:
+            "Block By Block",
+        booth_number: "4622",
+        category: "Transit Services"
+    },
+
+    {
+        id: "4624",
+        company_name:
+            "Block By Block",
+        booth_number: "4624",
+        category: "Transit Services"
+    },
+
+    {
+        id: "4625",
+        company_name:
+            "ICP DAS",
+        booth_number: "4625",
+        category: "Technology"
+    },
+
+    {
+        id: "4627",
+        company_name:
+            "ddm hopt+schuler",
+        booth_number: "4627",
+        category: "Fare Systems"
+    },
+
+    {
+        id: "4628",
+        company_name: "HID",
+        booth_number: "4628",
+        category: "Identity Technology"
+    },
+
+    {
+        id: "4631",
+        company_name:
+            "Zilla Corporation",
+        booth_number: "4631",
+        category: "Transit Products"
+    },
+
+    {
+        id: "4632",
+        company_name:
+            "SELS USA",
+        booth_number: "4632",
+        category: "Transportation Systems"
+    },
+
+    {
+        id: "4636",
+        company_name:
+            "Milwaukee Composites",
+        booth_number: "4636",
+        category: "Vehicle Components"
+    },
+
+    {
+        id: "4638",
+        company_name:
+            "SpaceAge Synthetics",
+        booth_number: "4638",
+        category: "Materials"
+    },
+
+    {
+        id: "4642",
+        company_name:
+            "Imagry Autonomous Buses & Shuttles",
+        booth_number: "4642",
+        category: "Autonomous Mobility"
+    },
+
+    {
+        id: "4644",
+        company_name:
+            "oToBrite Electronics",
+        booth_number: "4644",
+        category: "Vehicle Technology"
+    },
+
+    {
+        id: "4646",
+        company_name:
+            "Dana B. Kenyon",
+        booth_number: "4646",
+        category: "Engineering"
+    },
+
+    {
+        id: "4647",
+        company_name:
+            "Spradling International",
+        booth_number: "4647",
+        category: "Vehicle Interiors"
+    },
+
+    {
+        id: "4648",
+        company_name:
+            "Concept Seating",
+        booth_number: "4648",
+        category: "Vehicle Interiors"
+    },
+
+    {
+        id: "4649",
+        company_name:
+            "WaySine LLC",
+        booth_number: "4649",
+        category: "Passenger Information"
+    }
+
+];
 
 
 
@@ -28,492 +1181,25 @@ document.addEventListener(
 function initializeMap() {
 
     exhibitors =
-        buildExhibitorDataset();
+        [...APTA_EXHIBITORS];
 
 
     bindControls();
 
-
     populateCategoryFilter();
-
 
     renderFloor();
 
-
     renderTargetRoute();
 
-
     updateMetrics();
-
 
     openExhibitorFromURL();
 
 
     setStatus(
-        `${exhibitors.length} mapped booths loaded`
+        `${APTA_FLOOR_LAYOUT.length} mapped booths loaded`
     );
-
-}
-
-
-
-/* =========================================================
-   EXHIBITOR DIRECTORY
-
-   This contains REAL public APTA company/booth information.
-
-   We will continue expanding this until the entire directory
-   is represented.
-
-   Floor coordinates are NOT stored here.
-
-   They come from floor-data.js.
-   ========================================================= */
-
-function buildExhibitorDataset() {
-
-    return [
-
-        {
-            id: "3181",
-            company_name: "LYT",
-            booth_number: "3181",
-            category: "Transit Technology"
-        },
-
-        {
-            id: "3182",
-            company_name:
-                "Propane Education & Research Council",
-            booth_number: "3182",
-            category: "Alternative Fuels"
-        },
-
-        {
-            id: "3185",
-            company_name: "LPA Group Plc",
-            booth_number: "3185",
-            category: "Transit Technology"
-        },
-
-        {
-            id: "3175",
-            company_name: "Token Transit",
-            booth_number: "3175",
-            category: "Fare Collection"
-        },
-
-        {
-            id: "3176",
-            company_name: "Xcalliber",
-            booth_number: "3176",
-            category: "Technology"
-        },
-
-        {
-            id: "3100",
-            company_name: "BAE SYSTEMS",
-            booth_number: "3100",
-            category: "Vehicle Systems"
-        },
-
-        {
-            id: "3103",
-            company_name:
-                "Brookville Equipment Corporation",
-            booth_number: "3103",
-            category: "Rolling Stock"
-        },
-
-        {
-            id: "3106",
-            company_name: "ROUSH CleanTech",
-            booth_number: "3106",
-            category: "Clean Transportation"
-        },
-
-        {
-            id: "3402",
-            company_name:
-                "Global Display Solutions, Inc. (GDS)",
-            booth_number: "3402",
-            category: "Passenger Systems"
-        },
-
-        {
-            id: "3405",
-            company_name:
-                "Advanced Rail Systems",
-            booth_number: "3405",
-            category: "Rail Technology"
-        },
-
-        {
-            id: "3406",
-            company_name:
-                "Fraenkische Industrial Pipes",
-            booth_number: "3406",
-            category: "Components"
-        },
-
-        {
-            id: "3408",
-            company_name: "REI",
-            booth_number: "3408",
-            category: "Transit Technology"
-        },
-
-        {
-            id: "3420",
-            company_name:
-                "Kawasaki Rail Car Inc.",
-            booth_number: "3420",
-            category: "Rolling Stock"
-        },
-
-        {
-            id: "3425",
-            company_name:
-                "Scheidt & Bachmann",
-            booth_number: "3425",
-            category: "Fare Collection"
-        },
-
-        {
-            id: "4210",
-            company_name: "LockNClimb, LLC",
-            booth_number: "4210",
-            category: "Equipment"
-        },
-
-        {
-            id: "4212",
-            company_name: "Kuba",
-            booth_number: "4212",
-            category: "Fare Collection"
-        },
-
-        {
-            id: "4217",
-            company_name: "BBA Project, Inc.",
-            booth_number: "4217",
-            category: "Consulting"
-        },
-
-        {
-            id: "4220",
-            company_name: "May Mobility",
-            booth_number: "4220",
-            category: "Autonomous Mobility"
-        },
-
-        {
-            id: "4231",
-            company_name:
-                "Tolar Manufacturing Company, Inc.",
-            booth_number: "4231",
-            category: "Transit Equipment"
-        },
-
-        {
-            id: "4234",
-            company_name:
-                "Michael Baker International, Inc.",
-            booth_number: "4234",
-            category: "Engineering"
-        },
-
-        {
-            id: "4237",
-            company_name:
-                "FLEETWATCH by S & A Systems, Inc.",
-            booth_number: "4237",
-            category: "Fleet Technology"
-        },
-
-        {
-            id: "4239",
-            company_name:
-                "A Customer's Point of View, Inc.",
-            booth_number: "4239",
-            category: "Consulting"
-        },
-
-        {
-            id: "4252",
-            company_name: "Delta-Danobat",
-            booth_number: "4252",
-            category: "Rail Equipment"
-        },
-
-        {
-            id: "4255",
-            company_name:
-                "The Routing Company",
-            booth_number: "4255",
-            category: "Mobility Technology"
-        },
-
-        {
-            id: "4257",
-            company_name:
-                "NATSCO/International Name Plate",
-            booth_number: "4257",
-            category: "Manufacturing"
-        },
-
-        {
-            id: "4261",
-            company_name: "Pro-Flex Inc.",
-            booth_number: "4261",
-            category: "Components"
-        },
-
-        {
-            id: "4264",
-            company_name:
-                "WOW Brand Products",
-            booth_number: "4264",
-            category: "Transit Products"
-        },
-
-        {
-            id: "4267",
-            company_name: "Ofolux S.R.L.",
-            booth_number: "4267",
-            category: "Vehicle Systems"
-        },
-
-        {
-            id: "4269",
-            company_name: "SignAgent",
-            booth_number: "4269",
-            category: "Passenger Information"
-        },
-
-        {
-            id: "4274",
-            company_name:
-                "Strive Transit Ambassadors",
-            booth_number: "4274",
-            category: "Transit Services"
-        },
-
-        {
-            id: "4275",
-            company_name: "RideShark",
-            booth_number: "4275",
-            category: "Mobility Technology"
-        },
-
-        {
-            id: "4277",
-            company_name: "Bridgestone",
-            booth_number: "4277",
-            category: "Vehicle Components"
-        },
-
-        {
-            id: "4279",
-            company_name: "APTA Exhibitor",
-            booth_number: "4279",
-            category: "Exhibitor"
-        },
-
-        {
-            id: "4281",
-            company_name:
-                "PureTech Systems, Inc.",
-            booth_number: "4281",
-            category: "Security Technology"
-        },
-
-        {
-            id: "4285",
-            company_name:
-                "Xiamen Magnetic North Technology Co., Ltd.",
-            booth_number: "4285",
-            category: "Transit Technology"
-        },
-
-        {
-            id: "4606",
-            company_name:
-                "Advantage Manfacturing",
-            booth_number: "4606",
-            category: "Manufacturing"
-        },
-
-        {
-            id: "4607",
-            company_name:
-                "Acorn Wire & Iron Works LLC",
-            booth_number: "4607",
-            category: "Manufacturing"
-        },
-
-        {
-            id: "4608",
-            company_name:
-                "Whiting Door Manufacturing Corp.",
-            booth_number: "4608",
-            category: "Vehicle Components"
-        },
-
-        {
-            id: "4610",
-            company_name: "Common Pixels",
-            booth_number: "4610",
-            category: "Technology"
-        },
-
-        {
-            id: "4612",
-            company_name: "PowerPusher",
-            booth_number: "4612",
-            category: "Equipment"
-        },
-
-        {
-            id: "4614",
-            company_name: "APTA Exhibitor",
-            booth_number: "4614",
-            category: "Exhibitor"
-        },
-
-        {
-            id: "4617",
-            company_name: "r2p USA Inc.",
-            booth_number: "4617",
-            category: "Transit Technology"
-        },
-
-        {
-            id: "4620",
-            company_name:
-                "S. Sterling Company",
-            booth_number: "4620",
-            category: "Transit Products"
-        },
-
-        {
-            id: "4622",
-            company_name: "Block By Block",
-            booth_number: "4622",
-            category: "Transit Services"
-        },
-
-        {
-            id: "4624",
-            company_name: "Block By Block",
-            booth_number: "4624",
-            category: "Transit Services"
-        },
-
-        {
-            id: "4625",
-            company_name:
-                "ICP DAS Co., Ltd.",
-            booth_number: "4625",
-            category: "Technology"
-        },
-
-        {
-            id: "4627",
-            company_name:
-                "ddm hopt+schuler GmbH & Co. KG",
-            booth_number: "4627",
-            category: "Fare Systems"
-        },
-
-        {
-            id: "4628",
-            company_name: "HID",
-            booth_number: "4628",
-            category: "Identity Technology"
-        },
-
-        {
-            id: "4631",
-            company_name:
-                "Zilla Corporation",
-            booth_number: "4631",
-            category: "Transit Products"
-        },
-
-        {
-            id: "4632",
-            company_name:
-                "SELS USA LLC",
-            booth_number: "4632",
-            category: "Transportation Systems"
-        },
-
-        {
-            id: "4636",
-            company_name:
-                "Milwaukee Composites, Inc.",
-            booth_number: "4636",
-            category: "Vehicle Components"
-        },
-
-        {
-            id: "4638",
-            company_name:
-                "SpaceAge Synthetics, Ltd.",
-            booth_number: "4638",
-            category: "Materials"
-        },
-
-        {
-            id: "4642",
-            company_name:
-                "Imagry Autonomous Buses & Shuttles",
-            booth_number: "4642",
-            category: "Autonomous Mobility"
-        },
-
-        {
-            id: "4644",
-            company_name:
-                "oToBrite Electronics, Inc.",
-            booth_number: "4644",
-            category: "Vehicle Technology"
-        },
-
-        {
-            id: "4646",
-            company_name:
-                "Dana B. Kenyon",
-            booth_number: "4646",
-            category: "Engineering"
-        },
-
-        {
-            id: "4647",
-            company_name:
-                "Spradling International",
-            booth_number: "4647",
-            category: "Vehicle Interiors"
-        },
-
-        {
-            id: "4648",
-            company_name:
-                "Concept Seating",
-            booth_number: "4648",
-            category: "Vehicle Interiors"
-        },
-
-        {
-            id: "4649",
-            company_name:
-                "WaySine LLC",
-            booth_number: "4649",
-            category: "Passenger Information"
-        }
-
-    ];
 
 }
 
@@ -526,7 +1212,9 @@ function buildExhibitorDataset() {
 function bindControls() {
 
     document
-        .getElementById("mapSearch")
+        .getElementById(
+            "mapSearch"
+        )
         ?.addEventListener(
             "input",
             applyFilters
@@ -534,7 +1222,9 @@ function bindControls() {
 
 
     document
-        .getElementById("mapTargetFilter")
+        .getElementById(
+            "mapTargetFilter"
+        )
         ?.addEventListener(
             "change",
             applyFilters
@@ -542,7 +1232,9 @@ function bindControls() {
 
 
     document
-        .getElementById("mapCategoryFilter")
+        .getElementById(
+            "mapCategoryFilter"
+        )
         ?.addEventListener(
             "change",
             applyFilters
@@ -550,7 +1242,9 @@ function bindControls() {
 
 
     document
-        .getElementById("resetMapButton")
+        .getElementById(
+            "resetMapButton"
+        )
         ?.addEventListener(
             "click",
             resetMap
@@ -558,7 +1252,9 @@ function bindControls() {
 
 
     document
-        .getElementById("selectedTargetButton")
+        .getElementById(
+            "selectedTargetButton"
+        )
         ?.addEventListener(
             "click",
             toggleSelectedTarget
@@ -569,7 +1265,89 @@ function bindControls() {
 
 
 /* =========================================================
-   FLOOR RENDERING
+   CATEGORY FILTER
+   ========================================================= */
+
+function populateCategoryFilter() {
+
+    const select =
+        document.getElementById(
+            "mapCategoryFilter"
+        );
+
+
+    if (!select) {
+        return;
+    }
+
+
+    /*
+       Prevent duplicates if initializeMap()
+       ever gets called twice.
+    */
+
+    while (
+        select.options.length >
+        1
+    ) {
+
+        select.remove(1);
+
+    }
+
+
+    const categories = [
+
+        ...new Set(
+
+            exhibitors
+                .map(
+                    exhibitor =>
+                        exhibitor.category
+                )
+                .filter(Boolean)
+
+        )
+
+    ];
+
+
+    categories.sort(
+        (a, b) =>
+            a.localeCompare(b)
+    );
+
+
+    categories.forEach(
+        category => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                category;
+
+
+            option.textContent =
+                category;
+
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   RENDER FLOOR
    ========================================================= */
 
 function renderFloor() {
@@ -581,13 +1359,24 @@ function renderFloor() {
 
 
     if (!floor) {
+
+        console.error(
+            'Map error: element with id="expoFloor" was not found.'
+        );
+
         return;
+
     }
 
 
     const unit =
         FLOOR_CONFIG.unitPixels;
 
+
+    /*
+       CRITICAL:
+       Set an explicit visible size.
+    */
 
     floor.style.width =
         `${
@@ -597,6 +1386,20 @@ function renderFloor() {
 
 
     floor.style.height =
+        `${
+            FLOOR_CONFIG.heightUnits *
+            unit
+        }px`;
+
+
+    floor.style.minWidth =
+        `${
+            FLOOR_CONFIG.widthUnits *
+            unit
+        }px`;
+
+
+    floor.style.minHeight =
         `${
             FLOOR_CONFIG.heightUnits *
             unit
@@ -626,11 +1429,15 @@ function renderFloor() {
                 );
 
 
-            floor.appendChild(
+            const booth =
                 createBooth(
                     layout,
                     exhibitor
-                )
+                );
+
+
+            floor.appendChild(
+                booth
             );
 
         }
@@ -666,6 +1473,10 @@ function renderZones(
 
             element.className =
                 "floor-zone";
+
+
+            element.style.position =
+                "absolute";
 
 
             element.style.left =
@@ -735,6 +1546,10 @@ function renderAisles(
                 "floor-aisle";
 
 
+            element.style.position =
+                "absolute";
+
+
             element.style.left =
                 `${aisle.x * unit}px`;
 
@@ -778,7 +1593,7 @@ function renderAisles(
 
 
 /* =========================================================
-   BOOTH
+   CREATE BOOTH
    ========================================================= */
 
 function createBooth(
@@ -826,16 +1641,14 @@ function createBooth(
 
     const company =
         exhibitor?.company_name ||
-        "APTA Exhibitor";
+        `Booth ${layout.booth_number}`;
 
 
-    const targeted =
+    if (
         isTargeted(
             layout.booth_number
-        );
-
-
-    if (targeted) {
+        )
+    ) {
 
         booth.classList.add(
             "target"
@@ -848,7 +1661,8 @@ function createBooth(
         selectedExhibitor &&
         String(
             selectedExhibitor.booth_number
-        ) ===
+        )
+        ===
         String(
             layout.booth_number
         )
@@ -875,12 +1689,12 @@ function createBooth(
 
 
         ${
-            layout.width >= 2
-            ||
+            layout.width >= 2 ||
             layout.depth >= 2
-            ?
-            `
 
+            ?
+
+            `
                 <span class="expo-booth-company">
 
                     ${
@@ -892,9 +1706,10 @@ function createBooth(
                     }
 
                 </span>
-
             `
+
             :
+
             ""
         }
 
@@ -946,7 +1761,7 @@ function createBooth(
 
 
 /* =========================================================
-   BOOTH LOOKUP
+   LOOKUPS
    ========================================================= */
 
 function getExhibitorByBooth(
@@ -957,7 +1772,8 @@ function getExhibitorByBooth(
         exhibitor =>
             String(
                 exhibitor.booth_number
-            ) ===
+            )
+            ===
             String(
                 boothNumber
             )
@@ -973,10 +1789,11 @@ function getLayoutByBooth(
 ) {
 
     return APTA_FLOOR_LAYOUT.find(
-        booth =>
+        layout =>
             String(
-                booth.booth_number
-            ) ===
+                layout.booth_number
+            )
+            ===
             String(
                 boothNumber
             )
@@ -995,12 +1812,6 @@ function selectBooth(
     boothNumber
 ) {
 
-    const exhibitor =
-        getExhibitorByBooth(
-            boothNumber
-        );
-
-
     const layout =
         getLayoutByBooth(
             boothNumber
@@ -1012,6 +1823,12 @@ function selectBooth(
     }
 
 
+    const exhibitor =
+        getExhibitorByBooth(
+            boothNumber
+        );
+
+
     selectedExhibitor = {
 
         id:
@@ -1020,7 +1837,7 @@ function selectBooth(
 
         company_name:
             exhibitor?.company_name ||
-            "APTA Exhibitor",
+            `Booth ${boothNumber}`,
 
         booth_number:
             boothNumber,
@@ -1031,15 +1848,15 @@ function selectBooth(
 
         description:
             exhibitor?.description ||
-            "Public exhibitor information for this booth is being added to the portfolio directory.",
+            "Public exhibitor profile information will appear here as the directory is completed.",
 
-        layout
+        layout:
+            layout
 
     };
 
 
     updateSelectedPanel();
-
 
     renderFloor();
 
@@ -1175,17 +1992,19 @@ function updateSelectedPanel() {
     }
 
 
-    const button =
+    const targetButton =
         document.getElementById(
             "selectedTargetButton"
         );
 
 
-    if (button) {
+    if (targetButton) {
 
-        button.innerHTML =
+        targetButton.innerHTML =
             targeted
+
             ?
+
             `
                 <span>
                     Remove Northstar Target
@@ -1193,7 +2012,9 @@ function updateSelectedPanel() {
 
                 <b>×</b>
             `
+
             :
+
             `
                 <span>
                     Add to Northstar Targets
@@ -1205,15 +2026,15 @@ function updateSelectedPanel() {
     }
 
 
-    const profile =
+    const profileLink =
         document.getElementById(
             "selectedProfileLink"
         );
 
 
-    if (profile) {
+    if (profileLink) {
 
-        profile.href =
+        profileLink.href =
             `exhibitors.html?id=${
                 encodeURIComponent(
                     selectedExhibitor.id
@@ -1223,15 +2044,15 @@ function updateSelectedPanel() {
     }
 
 
-    const interaction =
+    const interactionLink =
         document.getElementById(
             "selectedInteractionLink"
         );
 
 
-    if (interaction) {
+    if (interactionLink) {
 
-        interaction.href =
+        interactionLink.href =
             `interactions.html?exhibitor=${
                 encodeURIComponent(
                     selectedExhibitor.id
@@ -1312,21 +2133,17 @@ function applyFilters() {
                     "";
 
 
-                const searchable =
-
+                const text =
                     `${company} ${boothNumber} ${category}`
-
                         .toLowerCase();
 
 
-                const searchMatch =
+                const matchesSearch =
                     !search ||
-                    searchable.includes(
-                        search
-                    );
+                    text.includes(search);
 
 
-                const categoryMatch =
+                const matchesCategory =
                     !categoryFilter ||
                     category ===
                     categoryFilter;
@@ -1338,7 +2155,7 @@ function applyFilters() {
                     );
 
 
-                let targetMatch =
+                let matchesTarget =
                     true;
 
 
@@ -1347,7 +2164,7 @@ function applyFilters() {
                     "targets"
                 ) {
 
-                    targetMatch =
+                    matchesTarget =
                         targeted;
 
                 }
@@ -1358,7 +2175,7 @@ function applyFilters() {
                     "not-targets"
                 ) {
 
-                    targetMatch =
+                    matchesTarget =
                         !targeted;
 
                 }
@@ -1366,9 +2183,9 @@ function applyFilters() {
 
                 const matches =
 
-                    searchMatch &&
-                    categoryMatch &&
-                    targetMatch;
+                    matchesSearch &&
+                    matchesCategory &&
+                    matchesTarget;
 
 
                 booth.classList.toggle(
@@ -1397,70 +2214,6 @@ function applyFilters() {
 
 
 /* =========================================================
-   CATEGORY FILTER
-   ========================================================= */
-
-function populateCategoryFilter() {
-
-    const select =
-        document.getElementById(
-            "mapCategoryFilter"
-        );
-
-
-    if (!select) {
-        return;
-    }
-
-
-    const categories = [
-
-        ...new Set(
-
-            exhibitors
-                .map(
-                    exhibitor =>
-                        exhibitor.category
-                )
-                .filter(Boolean)
-
-        )
-
-    ];
-
-
-    categories.sort();
-
-
-    categories.forEach(
-        category => {
-
-            const option =
-                document.createElement(
-                    "option"
-                );
-
-
-            option.value =
-                category;
-
-
-            option.textContent =
-                category;
-
-
-            select.appendChild(
-                option
-            );
-
-        }
-    );
-
-}
-
-
-
-/* =========================================================
    TARGET STORAGE
    ========================================================= */
 
@@ -1480,7 +2233,13 @@ function getTargets() {
 
     }
 
-    catch {
+    catch (error) {
+
+        console.error(
+            "Target storage error:",
+            error
+        );
+
 
         return [];
 
@@ -1509,7 +2268,8 @@ function isTargeted(
         target =>
             String(
                 target.exhibitor_id
-            ) ===
+            )
+            ===
             String(id)
     );
 
@@ -1518,7 +2278,7 @@ function isTargeted(
 
 
 /* =========================================================
-   TARGET TOGGLE
+   TOGGLE TARGET
    ========================================================= */
 
 function toggleSelectedTarget() {
@@ -1537,7 +2297,8 @@ function toggleSelectedTarget() {
             target =>
                 String(
                     target.exhibitor_id
-                ) ===
+                )
+                ===
                 String(
                     selectedExhibitor.id
                 )
@@ -1610,12 +2371,9 @@ function toggleSelectedTarget() {
 
     updateSelectedPanel();
 
-
     renderTargetRoute();
 
-
     renderFloor();
-
 
     updateMetrics();
 
@@ -1640,7 +2398,8 @@ function renderTargetRoute() {
     }
 
 
-    const targetCompanies =
+    const route =
+
         getTargets()
 
             .map(
@@ -1651,7 +2410,8 @@ function renderTargetRoute() {
                             item =>
                                 String(
                                     item.id
-                                ) ===
+                                )
+                                ===
                                 String(
                                     target.exhibitor_id
                                 )
@@ -1689,16 +2449,6 @@ function renderTargetRoute() {
 
             .filter(Boolean)
 
-
-            /* ---------------------------------------------
-               Simple physical route ordering.
-
-               Top-to-bottom, then left-to-right.
-
-               Later we can replace this with true nearest
-               neighbor routing.
-               --------------------------------------------- */
-
             .sort(
                 (a, b) => {
 
@@ -1726,7 +2476,7 @@ function renderTargetRoute() {
 
     setText(
         "targetRouteCount",
-        targetCompanies.length
+        route.length
     );
 
 
@@ -1734,9 +2484,7 @@ function renderTargetRoute() {
         "";
 
 
-    if (
-        !targetCompanies.length
-    ) {
+    if (!route.length) {
 
         container.innerHTML = `
 
@@ -1754,7 +2502,7 @@ function renderTargetRoute() {
     }
 
 
-    targetCompanies.forEach(
+    route.forEach(
         (
             exhibitor,
             index
@@ -1817,9 +2565,7 @@ function renderTargetRoute() {
 
 
                 <span class="route-arrow">
-
                     →
-
                 </span>
 
             `;
@@ -1863,49 +2609,57 @@ function showTooltip(
     event
 ) {
 
-    const width =
+    const widthFeet =
         layout.width *
         FLOOR_CONFIG.unitFeet;
 
 
-    const depth =
+    const depthFeet =
         layout.depth *
         FLOOR_CONFIG.unitFeet;
 
 
     const sqft =
-        width *
-        depth;
+        widthFeet *
+        depthFeet;
 
 
     setText(
         "tooltipStatus",
+
         isTargeted(
             layout.booth_number
         )
-            ?
-            "NORTHSTAR TARGET"
-            :
-            "APTA EXHIBITOR"
+
+        ?
+
+        "NORTHSTAR TARGET"
+
+        :
+
+        "APTA EXHIBITOR"
     );
 
 
     setText(
         "tooltipCompany",
+
         exhibitor?.company_name ||
-        "APTA Exhibitor"
+        `Booth ${layout.booth_number}`
     );
 
 
     setText(
         "tooltipBooth",
+
         `Booth ${layout.booth_number}`
     );
 
 
     setText(
         "tooltipSize",
-        `${width}' × ${depth}' · ${sqft} sq ft`
+
+        `${widthFeet}' × ${depthFeet}' · ${sqft} sq ft`
     );
 
 
@@ -1951,7 +2705,7 @@ function moveTooltip(
 
 
     const gap =
-        15;
+        16;
 
 
     let x =
@@ -1967,8 +2721,7 @@ function moveTooltip(
     if (
         x +
         tooltip.offsetWidth >
-        window.innerWidth -
-        10
+        window.innerWidth - 10
     ) {
 
         x =
@@ -1982,8 +2735,7 @@ function moveTooltip(
     if (
         y +
         tooltip.offsetHeight >
-        window.innerHeight -
-        10
+        window.innerHeight - 10
     ) {
 
         y =
@@ -2036,7 +2788,7 @@ function updateMetrics() {
     );
 
 
-    const mappedTargets =
+    const targets =
         APTA_FLOOR_LAYOUT.filter(
             layout =>
                 isTargeted(
@@ -2047,7 +2799,7 @@ function updateMetrics() {
 
     setText(
         "mapTargetCount",
-        mappedTargets
+        targets
     );
 
 
@@ -2105,8 +2857,9 @@ function resetMap() {
 
     updateSelectedPanel();
 
-
     renderFloor();
+
+    updateMetrics();
 
 
     setStatus(
@@ -2118,7 +2871,7 @@ function resetMap() {
 
 
 /* =========================================================
-   URL
+   URL SELECTION
    ========================================================= */
 
 function openExhibitorFromURL() {
@@ -2143,7 +2896,8 @@ function openExhibitorFromURL() {
             item =>
                 String(
                     item.id
-                ) ===
+                )
+                ===
                 String(id)
         );
 
@@ -2155,6 +2909,18 @@ function openExhibitorFromURL() {
 
     selectBooth(
         exhibitor.booth_number
+    );
+
+
+    setTimeout(
+        () => {
+
+            scrollToBooth(
+                exhibitor.booth_number
+            );
+
+        },
+        50
     );
 
 }
@@ -2229,7 +2995,7 @@ function setStatus(
             () => {
 
                 element.textContent =
-                    `${APTA_FLOOR_LAYOUT.length} mapped booths · APTA 2026 reconstruction`;
+                    `${APTA_FLOOR_LAYOUT.length} mapped booths · Interactive floor ready`;
 
             },
             3000
@@ -2291,7 +3057,10 @@ function shortenCompany(
     }
 
 
-    if (company.length <= 18) {
+    if (
+        company.length <=
+        18
+    ) {
 
         return company;
 
@@ -2299,11 +3068,10 @@ function shortenCompany(
 
 
     return (
-        company
-            .slice(
-                0,
-                16
-            )
+        company.slice(
+            0,
+            16
+        )
         +
         "…"
     );
@@ -2315,7 +3083,8 @@ function shortenCompany(
 function generateId() {
 
     if (
-        crypto?.randomUUID
+        window.crypto &&
+        crypto.randomUUID
     ) {
 
         return (
@@ -2346,22 +3115,27 @@ function escapeHTML(
     return String(
         value ?? ""
     )
+
         .replace(
             /&/g,
             "&amp;"
         )
+
         .replace(
             /</g,
             "&lt;"
         )
+
         .replace(
             />/g,
             "&gt;"
         )
+
         .replace(
             /"/g,
             "&quot;"
         )
+
         .replace(
             /'/g,
             "&#039;"
