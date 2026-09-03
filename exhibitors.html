@@ -1,1 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Browse and research exhibitors attending APTA TRANSform & Expo 2026."
+    >
+
+    <title>Exhibitors | APTA 2026 Team Hub</title>
+
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/exhibitors.css">
+</head>
+
+
+<body>
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="app-header">
+
+        <a
+            href="index.html"
+            class="brand"
+        >
+
+            <div class="brand-mark">
+                NTS
+            </div>
+
+            <div class="brand-copy">
+
+                <span>
+                    APTA 2026
+                </span>
+
+                <strong>
+                    Team Hub
+                </strong>
+
+            </div>
+
+        </a>
+
+
+        <nav class="desktop-nav">
+
+            <a href="index.html">
+                Dashboard
+            </a>
+
+            <a
+                href="exhibitors.html"
+                class="active"
+            >
+                Exhibitors
+            </a>
+
+            <a href="map.html">
+                Expo Map
+            </a>
+
+            <a href="targets.html">
+                Targets
+            </a>
+
+            <a href="interactions.html">
+                Interactions
+            </a>
+
+            <a href="leads.html">
+                Leads
+            </a>
+
+        </nav>
+
+
+        <a
+            href="interactions.html"
+            class="header-action"
+        >
+            + Log Interaction
+        </a>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
+
+    <main class="exhibitors-page">
+
+
+        <!-- =================================================
+             DEMO NOTICE
+             ================================================= -->
+
+        <div class="demo-notice">
+            Portfolio Demo · Northstar Transit Solutions is a fictional company
+        </div>
+
+
+
+        <!-- =================================================
+             PAGE HERO
+             ================================================= -->
+
+        <section class="page-heading">
+
+            <div class="heading-copy">
+
+                <span class="kicker">
+                    EXHIBITOR INTELLIGENCE
+                </span>
+
+                <h1>
+                    Find the companies
+                    worth knowing.
+                </h1>
+
+                <p>
+                    Explore the APTA exhibitor directory, research companies,
+                    review booth information, and build Northstar's priority
+                    target list before and during the expo.
+                </p>
+
+            </div>
+
+
+            <div class="heading-summary">
+
+                <div class="heading-stat">
+
+                    <span>
+                        Exhibitors
+                    </span>
+
+                    <strong id="exhibitorTotal">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="heading-stat">
+
+                    <span>
+                        Targets
+                    </span>
+
+                    <strong id="targetTotal">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             DATABASE STATUS
+             ================================================= -->
+
+        <div
+            id="databaseStatus"
+            class="status-bar"
+        >
+            Demo workspace ready
+        </div>
+
+
+
+        <!-- =================================================
+             SEARCH / FILTER WORKSPACE
+             ================================================= -->
+
+        <section class="directory-tools">
+
+            <div class="search-wrap">
+
+                <span class="search-icon">
+                    ⌕
+                </span>
+
+                <input
+                    id="exhibitorSearch"
+                    type="search"
+                    placeholder="Search company, category, booth, service or keyword..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <div class="filter-group">
+
+                <select
+                    id="categoryFilter"
+                    aria-label="Filter by category"
+                >
+
+                    <option value="">
+                        All Categories
+                    </option>
+
+                </select>
+
+
+                <select
+                    id="targetFilter"
+                    aria-label="Filter by target status"
+                >
+
+                    <option value="">
+                        All Exhibitors
+                    </option>
+
+                    <option value="target">
+                        Northstar Targets
+                    </option>
+
+                    <option value="not-target">
+                        Not Yet Targeted
+                    </option>
+
+                </select>
+
+
+                <select
+                    id="sortFilter"
+                    aria-label="Sort exhibitors"
+                >
+
+                    <option value="company-asc">
+                        Company A–Z
+                    </option>
+
+                    <option value="company-desc">
+                        Company Z–A
+                    </option>
+
+                    <option value="booth">
+                        Booth Number
+                    </option>
+
+                    <option value="targets">
+                        Targets First
+                    </option>
+
+                </select>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             DIRECTORY META
+             ================================================= -->
+
+        <section class="directory-meta">
+
+            <div>
+
+                <span class="eyebrow">
+                    EXHIBITOR DIRECTORY
+                </span>
+
+                <strong id="resultCount">
+                    0 companies
+                </strong>
+
+            </div>
+
+
+            <div class="view-controls">
+
+                <button
+                    id="gridViewButton"
+                    class="view-button active"
+                    type="button"
+                    aria-label="Grid view"
+                >
+                    ▦
+                </button>
+
+
+                <button
+                    id="listViewButton"
+                    class="view-button"
+                    type="button"
+                    aria-label="List view"
+                >
+                    ☰
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             EXHIBITOR GRID
+             ================================================= -->
+
+        <section
+            id="exhibitorGrid"
+            class="exhibitor-grid"
+        >
+
+
+            <!-- =============================================
+                 EMPTY / LOADING STATE
+                 JavaScript will replace this with cards.
+                 ============================================= -->
+
+            <div
+                id="exhibitorEmptyState"
+                class="directory-empty"
+            >
+
+                <span class="empty-number">
+                    2026
+                </span>
+
+                <div>
+
+                    <strong>
+                        Exhibitor directory
+                    </strong>
+
+                    <p>
+                        APTA exhibitors will appear here once the
+                        directory data is loaded.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             OPTIONAL LOAD MORE
+             ================================================= -->
+
+        <div
+            id="loadMoreWrap"
+            class="load-more-wrap"
+            hidden
+        >
+
+            <button
+                id="loadMoreButton"
+                class="button"
+                type="button"
+            >
+                Load More Exhibitors
+            </button>
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         EXHIBITOR PROFILE DRAWER
+         ===================================================== -->
+
+    <div
+        id="drawerOverlay"
+        class="drawer-overlay"
+    ></div>
+
+
+    <aside
+        id="exhibitorDrawer"
+        class="exhibitor-drawer"
+        aria-hidden="true"
+    >
+
+        <!-- DRAWER HEADER -->
+
+        <div class="drawer-header">
+
+            <div>
+
+                <span class="drawer-kicker">
+                    EXHIBITOR PROFILE
+                </span>
+
+                <span
+                    id="drawerBooth"
+                    class="drawer-booth"
+                >
+                    Booth —
+                </span>
+
+            </div>
+
+
+            <button
+                id="drawerClose"
+                class="drawer-close"
+                type="button"
+                aria-label="Close exhibitor profile"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+
+        <!-- DRAWER BODY -->
+
+        <div class="drawer-body">
+
+
+            <!-- COMPANY IDENTITY -->
+
+            <section class="company-identity">
+
+                <div
+                    id="drawerCompanyMark"
+                    class="company-mark"
+                >
+                    N
+                </div>
+
+
+                <div>
+
+                    <span
+                        id="drawerCategory"
+                        class="company-category"
+                    >
+                        Category
+                    </span>
+
+                    <h2 id="drawerCompany">
+                        Company Name
+                    </h2>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- TARGET ACTION -->
+
+            <section class="drawer-primary-action">
+
+                <button
+                    id="drawerTargetButton"
+                    class="target-button"
+                    type="button"
+                >
+
+                    <span>
+                        +
+                    </span>
+
+                    Add to Northstar Targets
+
+                </button>
+
+            </section>
+
+
+
+            <!-- COMPANY DESCRIPTION -->
+
+            <section class="drawer-section">
+
+                <span class="drawer-label">
+                    ABOUT
+                </span>
+
+                <p
+                    id="drawerDescription"
+                    class="drawer-description"
+                >
+                    Company information will appear here.
+                </p>
+
+            </section>
+
+
+
+            <!-- COMPANY DETAILS -->
+
+            <section class="drawer-section">
+
+                <span class="drawer-label">
+                    COMPANY DETAILS
+                </span>
+
+
+                <div class="detail-grid">
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Booth
+                        </span>
+
+                        <strong id="drawerBoothDetail">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Category
+                        </span>
+
+                        <strong id="drawerCategoryDetail">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Website
+                        </span>
+
+                        <a
+                            id="drawerWebsite"
+                            href="#"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            —
+                        </a>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Target Status
+                        </span>
+
+                        <strong id="drawerTargetStatus">
+                            Not Targeted
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- NORTHSTAR RESEARCH -->
+
+            <section class="drawer-section research-section">
+
+                <div class="drawer-section-heading">
+
+                    <div>
+
+                        <span class="drawer-label">
+                            NORTHSTAR INTELLIGENCE
+                        </span>
+
+                        <h3>
+                            Research Notes
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div class="research-field">
+
+                    <label for="drawerFit">
+                        Potential Fit
+                    </label>
+
+                    <select id="drawerFit">
+
+                        <option value="">
+                            Not Reviewed
+                        </option>
+
+                        <option value="high">
+                            High Potential
+                        </option>
+
+                        <option value="medium">
+                            Medium Potential
+                        </option>
+
+                        <option value="low">
+                            Low Potential
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="research-field">
+
+                    <label for="drawerNotes">
+                        Research Notes
+                    </label>
+
+                    <textarea
+                        id="drawerNotes"
+                        rows="5"
+                        placeholder="Why is this company relevant? What should the team know before visiting the booth?"
+                    ></textarea>
+
+                </div>
+
+
+                <button
+                    id="saveResearchButton"
+                    class="button button-primary"
+                    type="button"
+                >
+                    Save Research
+                </button>
+
+            </section>
+
+
+
+            <!-- QUICK ACTIONS -->
+
+            <section class="drawer-section">
+
+                <span class="drawer-label">
+                    QUICK ACTIONS
+                </span>
+
+
+                <div class="drawer-actions">
+
+                    <a
+                        id="drawerMapLink"
+                        href="map.html"
+                        class="drawer-action"
+                    >
+
+                        <span>
+                            01
+                        </span>
+
+                        <strong>
+                            Find on Map
+                        </strong>
+
+                        <b>
+                            →
+                        </b>
+
+                    </a>
+
+
+                    <a
+                        id="drawerInteractionLink"
+                        href="interactions.html"
+                        class="drawer-action"
+                    >
+
+                        <span>
+                            02
+                        </span>
+
+                        <strong>
+                            Log Interaction
+                        </strong>
+
+                        <b>
+                            →
+                        </b>
+
+                    </a>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MOBILE NAVIGATION
+         ===================================================== -->
+
+    <nav class="mobile-nav">
+
+        <a href="index.html">
+
+            <span>
+                ◫
+            </span>
+
+            Dashboard
+
+        </a>
+
+
+        <a
+            href="exhibitors.html"
+            class="active"
+        >
+
+            <span>
+                ⌕
+            </span>
+
+            Exhibitors
+
+        </a>
+
+
+        <a
+            href="interactions.html"
+            class="mobile-add"
+        >
+
+            <strong>
+                +
+            </strong>
+
+            <small>
+                Log
+            </small>
+
+        </a>
+
+
+        <a href="targets.html">
+
+            <span>
+                ◎
+            </span>
+
+            Targets
+
+        </a>
+
+
+        <a href="leads.html">
+
+            <span>
+                ↗
+            </span>
+
+            Leads
+
+        </a>
+
+    </nav>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+         ===================================================== -->
+
+    <script src="js/config.js"></script>
+    <script src="js/exhibitors.js"></script>
+
+</body>
+
+</html>
