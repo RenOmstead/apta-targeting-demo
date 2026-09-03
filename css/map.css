@@ -2507,3 +2507,93 @@ body {
     }
 
 }
+/* =========================================================
+   RECONSTRUCTED FLOOR STRUCTURE
+   ========================================================= */
+
+.floor-zone {
+    position: absolute;
+
+    z-index: 0;
+
+    border:
+        1px solid
+        rgba(215, 185, 134, 0.07);
+
+    background:
+        rgba(255,255,255,0.008);
+
+    pointer-events: none;
+}
+
+
+.floor-zone > span {
+    position: absolute;
+
+    top: 8px;
+    left: 10px;
+
+    color:
+        rgba(215,185,134,0.11);
+
+    font-size: 0.48rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.14em;
+
+    text-transform: uppercase;
+}
+
+
+.floor-aisle {
+    position: absolute;
+
+    z-index: 1;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    pointer-events: none;
+
+    background:
+        rgba(247,239,232,0.018);
+
+    border-top:
+        1px solid
+        rgba(247,239,232,0.025);
+
+    border-bottom:
+        1px solid
+        rgba(247,239,232,0.025);
+}
+
+
+.floor-aisle > span {
+    color:
+        rgba(215,185,134,0.19);
+
+    font-size: 0.48rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.18em;
+
+    text-transform: uppercase;
+}
+
+
+.route-item {
+    width: 100%;
+
+    border-left: none;
+    border-right: none;
+    border-top: none;
+
+    background: transparent;
+
+    text-align: left;
+}
