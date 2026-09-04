@@ -1,908 +1,1979 @@
-<!DOCTYPE html>
-<html lang="en">
+/* =========================================================
+   APTA 2026 LEADS
+   NORTHSTAR TRANSIT SOLUTIONS
+   ========================================================= */
 
-<head>
+:root {
+    --bg: #11100f;
+    --bg-soft: #181514;
 
-    <meta charset="UTF-8">
+    --surface: #1d1918;
+    --surface-2: #241e1e;
+    --surface-hover: #2b2324;
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    --cream: #f7efe8;
+    --soft-cream: #ddd1c7;
 
-    <title>
-        Leads | APTA 2026 Team Hub
-    </title>
+    --muted: #9c9088;
+    --muted-light: #b9aca3;
 
-    <link
-        rel="stylesheet"
-        href="css/global.css"
-    >
+    --berry: #a63d66;
+    --berry-bright: #d45d87;
 
-    <link
-        rel="stylesheet"
-        href="css/leads.css"
-    >
+    --coral: #f1846f;
+    --coral-soft: #f6ad95;
 
-</head>
+    --champagne: #d7b986;
+    --champagne-light: #f1d8ac;
 
+    --green: #7da78b;
+    --green-light: #b9d3c1;
 
-<body>
+    --red: #c86262;
 
+    --border: rgba(247,239,232,.09);
+    --border-strong: rgba(247,239,232,.16);
 
-    <!-- =====================================================
-         HEADER
-         ===================================================== -->
+    --shadow:
+        0 24px 70px rgba(0,0,0,.32);
+}
 
-    <header class="app-header">
 
+/* =========================================================
+   FOUNDATION
+   ========================================================= */
 
-        <a
-            class="brand"
-            href="index.html"
-        >
+* {
+    box-sizing: border-box;
+}
 
-            <div class="brand-mark">
-                NTS
-            </div>
 
+body {
+    min-height: 100vh;
 
-            <div class="brand-copy">
+    margin: 0;
 
-                <span>
-                    APTA 2026
-                </span>
+    background:
+        radial-gradient(
+            circle at 86% 8%,
+            rgba(166,61,102,.16),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 8% 72%,
+            rgba(241,132,111,.07),
+            transparent 27%
+        ),
+        linear-gradient(
+            180deg,
+            #151211,
+            #0f0e0d
+        );
 
-                <strong>
-                    Team Hub
-                </strong>
+    color: var(--cream);
+}
 
-            </div>
 
-        </a>
+body.composer-open {
+    overflow: hidden;
+}
 
 
-        <nav class="desktop-nav">
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
 
-            <a href="index.html">
-                Dashboard
-            </a>
 
-            <a href="exhibitors.html">
-                Exhibitors
-            </a>
+button {
+    color: inherit;
+}
 
-            <a href="map.html">
-                Expo Map
-            </a>
 
-            <a href="targets.html">
-                Targets
-            </a>
+a {
+    color: inherit;
 
-            <a href="interactions.html">
-                Interactions
-            </a>
+    text-decoration: none;
+}
 
-            <a
-                href="leads.html"
-                class="active"
-            >
-                Leads
-            </a>
 
-        </nav>
+.button-reset {
+    border: none;
 
+    cursor: pointer;
+}
 
-        <button
-            id="headerAddLeadButton"
-            class="header-action button-reset"
-            type="button"
-        >
-            Add Lead
-        </button>
 
+/* =========================================================
+   HEADER
+   ========================================================= */
 
-    </header>
+.app-header {
+    position: sticky;
 
+    top: 0;
 
+    z-index: 1000;
 
-    <!-- =====================================================
-         PAGE
-         ===================================================== -->
+    min-height: 76px;
 
-    <main class="leads-page">
+    display: grid;
 
+    grid-template-columns:
+        auto
+        1fr
+        auto;
 
-        <!-- =================================================
-             DEMO NOTICE
-             ================================================= -->
+    align-items: stretch;
 
-        <div class="demo-notice">
+    background:
+        rgba(17,16,15,.93);
 
-            Portfolio Demo · Northstar Transit Solutions is a fictional company
+    backdrop-filter:
+        blur(22px);
 
-        </div>
+    -webkit-backdrop-filter:
+        blur(22px);
 
+    border-bottom:
+        1px solid
+        var(--border);
+}
 
 
-        <!-- =================================================
-             HERO
-             ================================================= -->
+.brand {
+    min-width: 260px;
 
-        <section class="page-heading">
+    display: flex;
 
+    align-items: stretch;
 
-            <div class="heading-copy">
+    border-right:
+        1px solid
+        var(--border);
+}
 
-                <span class="kicker">
-                    POST-EXPO PIPELINE
-                </span>
 
+.brand-mark {
+    width: 78px;
 
-                <h1>
-                    Turn good conversations
-                    <em>into next steps.</em>
-                </h1>
+    display: grid;
 
+    place-items: center;
 
-                <p>
+    background:
+        linear-gradient(
+            145deg,
+            var(--berry),
+            var(--coral)
+        );
 
-                    Convert promising APTA conversations into a
-                    structured pipeline with owners, follow-up dates,
-                    opportunity value, probability, and clear next actions.
+    color: white;
 
-                </p>
+    font-size: 1rem;
 
-            </div>
+    font-weight: 900;
 
+    letter-spacing: .13em;
+}
 
 
-            <div class="heading-action">
+.brand-copy {
+    display: flex;
 
-                <button
-                    id="heroAddLeadButton"
-                    class="primary-heading-action"
-                    type="button"
-                >
+    flex-direction: column;
 
-                    <span>
-                        Add lead
-                    </span>
+    justify-content: center;
 
-                    <strong>
-                        +
-                    </strong>
+    padding: 0 20px;
+}
 
-                </button>
 
-            </div>
+.brand-copy span {
+    color: var(--champagne);
 
+    font-size: .59rem;
 
-        </section>
+    font-weight: 800;
 
+    letter-spacing: .16em;
 
+    text-transform: uppercase;
+}
 
-        <!-- =================================================
-             METRICS
-             ================================================= -->
 
-        <section class="lead-metrics">
+.brand-copy strong {
+    margin-top: 3px;
 
+    color: var(--cream);
 
-            <article class="metric-card">
+    font-size: .94rem;
+}
 
-                <span class="metric-label">
-                    Leads
-                </span>
 
-                <strong id="metricTotal">
-                    0
-                </strong>
+/* =========================================================
+   NAV
+   ========================================================= */
 
-                <small>
-                    active opportunities
-                </small>
+.desktop-nav {
+    display: flex;
 
-            </article>
+    align-items: stretch;
 
+    justify-content: center;
+}
 
-            <article class="metric-card">
 
-                <span class="metric-label">
-                    Pipeline
-                </span>
+.desktop-nav a {
+    position: relative;
 
-                <strong id="metricPipeline">
-                    $0
-                </strong>
+    display: flex;
 
-                <small>
-                    estimated value
-                </small>
+    align-items: center;
 
-            </article>
+    padding: 0 18px;
 
+    color: var(--muted-light);
 
-            <article class="metric-card weighted-metric">
+    font-size: .68rem;
 
-                <span class="metric-label">
-                    Weighted
-                </span>
+    font-weight: 700;
 
-                <strong id="metricWeighted">
-                    $0
-                </strong>
+    letter-spacing: .09em;
 
-                <small>
-                    probability adjusted
-                </small>
+    text-transform: uppercase;
+}
 
-            </article>
 
+.desktop-nav a:hover {
+    color: var(--cream);
 
-            <article class="metric-card">
+    background:
+        rgba(255,255,255,.025);
+}
 
-                <span class="metric-label">
-                    Follow-Up Due
-                </span>
 
-                <strong id="metricDue">
-                    0
-                </strong>
+.desktop-nav a.active {
+    color: var(--cream);
+}
 
-                <small>
-                    need attention
-                </small>
 
-            </article>
+.desktop-nav a.active::after {
+    content: "";
 
+    position: absolute;
 
-        </section>
+    left: 18px;
 
+    right: 18px;
 
+    bottom: 0;
 
-        <!-- =================================================
-             STATUS
-             ================================================= -->
+    height: 2px;
 
-        <div class="status-bar">
+    background:
+        linear-gradient(
+            90deg,
+            var(--berry-bright),
+            var(--coral)
+        );
+}
 
-            <span id="databaseStatus">
-                Loading lead pipeline...
-            </span>
 
-        </div>
+/* =========================================================
+   HEADER ACTION
+   ========================================================= */
 
+.header-action {
+    display: flex;
 
+    align-items: center;
 
-        <!-- =================================================
-             TOOLBAR
-             ================================================= -->
+    justify-content: center;
 
-        <section class="leads-toolbar">
+    padding: 0 27px;
 
+    background: var(--cream);
 
-            <label class="lead-search">
+    color: #171311;
 
-                <span>
-                    ⌕
-                </span>
+    font-size: .66rem;
 
-                <input
-                    id="leadSearch"
-                    type="search"
-                    placeholder="Search company, contact, owner, next step..."
-                    autocomplete="off"
-                >
+    font-weight: 900;
 
-            </label>
+    letter-spacing: .09em;
 
+    text-transform: uppercase;
+}
 
 
-            <select id="stageFilter">
+.header-action:hover {
+    background: var(--champagne-light);
+}
 
-                <option value="">
-                    All stages
-                </option>
 
-                <option value="new">
-                    New
-                </option>
+/* =========================================================
+   PAGE
+   ========================================================= */
 
-                <option value="qualified">
-                    Qualified
-                </option>
+.leads-page {
+    width:
+        min(
+            1500px,
+            calc(100% - 54px)
+        );
 
-                <option value="discovery">
-                    Discovery
-                </option>
+    margin: 0 auto;
 
-                <option value="proposal">
-                    Proposal
-                </option>
+    padding:
+        38px 0
+        110px;
+}
 
-                <option value="negotiation">
-                    Negotiation
-                </option>
 
-                <option value="won">
-                    Won
-                </option>
+/* =========================================================
+   DEMO NOTICE
+   ========================================================= */
 
-                <option value="lost">
-                    Lost
-                </option>
+.demo-notice {
+    position: relative;
 
-            </select>
+    margin-bottom: 26px;
 
+    padding:
+        11px 16px
+        11px 20px;
 
+    border:
+        1px solid
+        rgba(215,185,134,.15);
 
-            <select id="ownerFilter">
+    background:
+        rgba(215,185,134,.05);
 
-                <option value="">
-                    All owners
-                </option>
+    color: var(--champagne);
 
-            </select>
+    font-size: .57rem;
 
+    font-weight: 800;
 
+    letter-spacing: .13em;
 
-            <select id="followUpFilter">
+    text-transform: uppercase;
+}
 
-                <option value="">
-                    All follow-up
-                </option>
 
-                <option value="due">
-                    Due / Overdue
-                </option>
+.demo-notice::before {
+    content: "";
 
-                <option value="scheduled">
-                    Scheduled
-                </option>
+    position: absolute;
 
-                <option value="none">
-                    No Date
-                </option>
+    top: -1px;
 
-            </select>
+    bottom: -1px;
 
+    left: -1px;
 
+    width: 3px;
 
-            <select id="leadSort">
+    background: var(--champagne);
+}
 
-                <option value="priority">
-                    Best Opportunity
-                </option>
 
-                <option value="value">
-                    Highest Value
-                </option>
+/* =========================================================
+   HERO
+   ========================================================= */
 
-                <option value="probability">
-                    Highest Probability
-                </option>
+.page-heading {
+    min-height: 295px;
 
-                <option value="follow-up">
-                    Follow-Up Date
-                </option>
+    display: grid;
 
-                <option value="company">
-                    Company A–Z
-                </option>
+    grid-template-columns:
+        minmax(0,1fr)
+        auto;
 
-            </select>
+    align-items: end;
 
+    gap: 60px;
 
-        </section>
+    padding:
+        36px 0
+        48px;
+}
 
 
+.heading-copy {
+    max-width: 920px;
+}
 
-        <!-- =================================================
-             BOARD HEADER
-             ================================================= -->
 
-        <section class="lead-board-header">
+.kicker,
+.section-kicker {
+    color: var(--coral-soft);
 
+    font-size: .57rem;
 
-            <div>
+    font-weight: 900;
 
-                <span class="section-kicker">
-                    NORTHSTAR OPPORTUNITY PIPELINE
-                </span>
+    letter-spacing: .17em;
 
-                <h2>
-                    Lead pipeline
-                </h2>
+    text-transform: uppercase;
+}
 
-            </div>
 
+.page-heading h1 {
+    max-width: 950px;
 
-            <div class="board-count">
+    margin:
+        12px 0 0;
 
-                <strong id="visibleLeadCount">
-                    0
-                </strong>
+    color: var(--cream);
 
-                <span>
-                    visible
-                </span>
+    font-size:
+        clamp(
+            3rem,
+            6vw,
+            6rem
+        );
 
-            </div>
+    font-weight: 700;
 
+    line-height: .91;
 
-        </section>
+    letter-spacing: -.06em;
+}
 
 
+.page-heading h1 em {
+    color: var(--champagne-light);
 
-        <!-- =================================================
-             LEAD LIST
-             ================================================= -->
+    font-style: normal;
+}
 
-        <section
-            id="leadList"
-            class="lead-list"
-        >
-        </section>
 
+.page-heading p {
+    max-width: 720px;
 
-    </main>
+    margin:
+        25px 0 0;
 
+    color: var(--muted-light);
 
+    font-size: .96rem;
 
-    <!-- =====================================================
-         OVERLAY
-         ===================================================== -->
+    line-height: 1.75;
+}
 
-    <div
-        id="leadOverlay"
-        class="lead-overlay"
-        hidden
-    >
-    </div>
 
+/* =========================================================
+   HERO ACTION
+   ========================================================= */
 
+.primary-heading-action {
+    min-width: 225px;
 
-    <!-- =====================================================
-         LEAD COMPOSER
-         ===================================================== -->
+    min-height: 74px;
 
-    <aside
-        id="leadComposer"
-        class="lead-composer"
-        hidden
-        aria-label="Lead editor"
-    >
+    display: flex;
 
+    align-items: center;
 
-        <div class="composer-header">
+    justify-content: space-between;
 
+    gap: 25px;
 
-            <div>
+    padding:
+        0 23px;
 
-                <span class="section-kicker">
-                    OPPORTUNITY RECORD
-                </span>
+    border:
+        1px solid
+        rgba(241,132,111,.28);
 
-                <h2 id="composerTitle">
-                    Add lead
-                </h2>
+    background:
+        linear-gradient(
+            135deg,
+            rgba(166,61,102,.24),
+            rgba(241,132,111,.12)
+        );
 
-            </div>
+    color: var(--cream);
 
+    cursor: pointer;
 
-            <button
-                id="composerCloseButton"
-                class="composer-close"
-                type="button"
-                aria-label="Close lead form"
-            >
-                ×
-            </button>
+    font-size: .69rem;
 
+    font-weight: 800;
+}
 
-        </div>
 
+.primary-heading-action strong {
+    color: var(--coral-soft);
 
+    font-size: 1.6rem;
 
-        <form
-            id="leadForm"
-            class="lead-form"
-        >
+    font-weight: 400;
+}
 
 
-            <input
-                id="editingLeadId"
-                type="hidden"
-            >
+/* =========================================================
+   METRICS
+   ========================================================= */
 
+.lead-metrics {
+    display: grid;
 
+    grid-template-columns:
+        repeat(4,1fr);
 
-            <div class="form-group full">
+    border:
+        1px solid
+        var(--border);
 
-                <label for="leadExhibitor">
-                    Company
-                </label>
+    margin-bottom: 22px;
+}
 
-                <select
-                    id="leadExhibitor"
-                    required
-                >
 
-                    <option value="">
-                        Select exhibitor
-                    </option>
+.metric-card {
+    position: relative;
 
-                </select>
+    min-height: 145px;
 
-            </div>
+    padding: 21px;
 
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.028),
+            rgba(255,255,255,.009)
+        );
+}
 
 
-            <div class="form-group">
+.metric-card + .metric-card {
+    border-left:
+        1px solid
+        var(--border);
+}
 
-                <label>
-                    Booth
-                </label>
 
-                <div
-                    id="leadBoothDisplay"
-                    class="readonly-field"
-                >
-                    —
-                </div>
+.metric-label {
+    display: block;
 
-            </div>
+    color: var(--muted);
 
+    font-size: .53rem;
 
+    font-weight: 900;
 
-            <div class="form-group">
+    letter-spacing: .12em;
 
-                <label for="leadSource">
-                    Lead Source
-                </label>
+    text-transform: uppercase;
+}
 
-                <select id="leadSource">
 
-                    <option value="apta-interaction">
-                        APTA Interaction
-                    </option>
+.metric-card strong {
+    display: block;
 
-                    <option value="target-research">
-                        Target Research
-                    </option>
+    margin-top: 16px;
 
-                    <option value="referral">
-                        Referral
-                    </option>
+    color: var(--champagne-light);
 
-                    <option value="inbound">
-                        Inbound
-                    </option>
+    font-size: 2.4rem;
 
-                    <option value="other">
-                        Other
-                    </option>
+    font-weight: 500;
 
-                </select>
+    line-height: 1;
+}
 
-            </div>
 
+.metric-card small {
+    display: block;
 
+    margin-top: 8px;
 
-            <div class="form-group">
+    color: var(--muted);
 
-                <label for="leadContactName">
-                    Primary Contact
-                </label>
+    font-size: .6rem;
+}
 
-                <input
-                    id="leadContactName"
-                    type="text"
-                    placeholder="Contact name"
-                >
 
-            </div>
+.weighted-metric::before {
+    content: "";
 
+    position: absolute;
 
+    top: -1px;
 
-            <div class="form-group">
+    left: -1px;
 
-                <label for="leadContactTitle">
-                    Contact Title
-                </label>
+    right: -1px;
 
-                <input
-                    id="leadContactTitle"
-                    type="text"
-                    placeholder="Role or department"
-                >
+    height: 3px;
 
-            </div>
+    background:
+        linear-gradient(
+            90deg,
+            var(--berry),
+            var(--coral)
+        );
+}
 
 
+/* =========================================================
+   STATUS
+   ========================================================= */
 
-            <div class="form-group">
+.status-bar {
+    display: flex;
 
-                <label for="leadStage">
-                    Stage
-                </label>
+    align-items: center;
 
-                <select
-                    id="leadStage"
-                    required
-                >
+    gap: 9px;
 
-                    <option value="new">
-                        New
-                    </option>
+    min-height: 28px;
 
-                    <option value="qualified">
-                        Qualified
-                    </option>
+    margin-bottom: 14px;
 
-                    <option value="discovery">
-                        Discovery
-                    </option>
+    color: var(--muted);
 
-                    <option value="proposal">
-                        Proposal
-                    </option>
+    font-size: .59rem;
 
-                    <option value="negotiation">
-                        Negotiation
-                    </option>
+    font-weight: 800;
 
-                    <option value="won">
-                        Won
-                    </option>
+    letter-spacing: .06em;
 
-                    <option value="lost">
-                        Lost
-                    </option>
+    text-transform: uppercase;
+}
 
-                </select>
 
-            </div>
+.status-bar::before {
+    content: "";
 
+    width: 7px;
 
+    height: 7px;
 
-            <div class="form-group">
+    border-radius: 50%;
 
-                <label for="leadOwner">
-                    Owner
-                </label>
+    background: var(--coral);
 
-                <input
-                    id="leadOwner"
-                    type="text"
-                    placeholder="Team member"
-                >
+    box-shadow:
+        0 0 12px
+        rgba(241,132,111,.65);
+}
 
-            </div>
 
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
 
+.leads-toolbar {
+    display: grid;
 
-            <div class="form-group">
+    grid-template-columns:
+        minmax(320px,1fr)
+        repeat(4,auto);
 
-                <label for="leadValue">
-                    Estimated Value
-                </label>
+    gap: 8px;
 
-                <input
-                    id="leadValue"
-                    type="number"
-                    min="0"
-                    step="1000"
-                    placeholder="0"
-                >
+    margin-bottom: 34px;
+}
 
-            </div>
 
+.lead-search {
+    min-height: 56px;
 
+    display: flex;
 
-            <div class="form-group">
+    align-items: center;
 
-                <label for="leadProbability">
-                    Probability %
-                </label>
+    border:
+        1px solid
+        var(--border);
 
-                <input
-                    id="leadProbability"
-                    type="number"
-                    min="0"
-                    max="100"
-                    step="5"
-                    value="25"
-                >
+    background:
+        rgba(255,255,255,.025);
+}
 
-            </div>
 
+.lead-search:focus-within {
+    border-color:
+        rgba(241,132,111,.32);
 
+    box-shadow:
+        0 0 30px
+        rgba(166,61,102,.07);
+}
 
-            <div class="form-group full">
 
-                <label for="leadNextAction">
-                    Next Action
-                </label>
+.lead-search span {
+    width: 52px;
 
-                <input
-                    id="leadNextAction"
-                    type="text"
-                    placeholder="Example: Send technical capabilities overview"
-                >
+    display: grid;
 
-            </div>
+    place-items: center;
 
+    color: var(--coral);
 
+    font-size: 1.1rem;
+}
 
-            <div class="form-group">
 
-                <label for="leadFollowUpDate">
-                    Follow-Up Date
-                </label>
+.lead-search input {
+    width: 100%;
 
-                <input
-                    id="leadFollowUpDate"
-                    type="date"
-                >
+    min-height: 54px;
 
-            </div>
+    padding-right: 18px;
 
+    border: none;
 
+    outline: none;
 
-            <div class="form-group">
+    background: transparent;
 
-                <label for="leadLastContact">
-                    Last Contact
-                </label>
+    color: var(--cream);
 
-                <input
-                    id="leadLastContact"
-                    type="date"
-                >
+    font-size: .78rem;
+}
 
-            </div>
 
+.lead-search input::placeholder {
+    color: #776b65;
+}
 
 
-            <div class="form-group full">
+.leads-toolbar select {
+    min-width: 145px;
 
-                <label for="leadNotes">
-                    Opportunity Notes
-                </label>
+    min-height: 56px;
 
-                <textarea
-                    id="leadNotes"
-                    rows="7"
-                    placeholder="Why is this opportunity valuable? What was discussed? What should happen next?"
-                ></textarea>
+    padding:
+        0 14px;
 
-            </div>
+    border:
+        1px solid
+        var(--border);
 
+    outline: none;
 
+    background: var(--surface);
 
-            <div class="composer-actions full">
+    color: var(--soft-cream);
 
+    font-size: .63rem;
 
-                <button
-                    id="cancelLeadButton"
-                    class="secondary-button"
-                    type="button"
-                >
-                    Cancel
-                </button>
+    font-weight: 700;
 
+    cursor: pointer;
+}
 
-                <button
-                    class="primary-button"
-                    type="submit"
-                >
 
-                    <span id="saveLeadLabel">
-                        Save Lead
-                    </span>
+/* =========================================================
+   BOARD HEADER
+   ========================================================= */
 
-                    <strong>
-                        →
-                    </strong>
+.lead-board-header {
+    display: flex;
 
-                </button>
+    align-items: flex-end;
 
+    justify-content: space-between;
 
-            </div>
+    gap: 30px;
 
+    padding-bottom: 17px;
 
-        </form>
+    border-bottom:
+        1px solid
+        var(--border);
+}
 
 
-    </aside>
+.lead-board-header h2 {
+    margin:
+        6px 0 0;
 
+    color: var(--cream);
 
+    font-size: 1.55rem;
+}
 
-    <!-- =====================================================
-         MOBILE NAV
-         ===================================================== -->
 
-    <nav class="mobile-nav">
+.board-count {
+    display: flex;
 
+    align-items: baseline;
 
-        <a href="index.html">
+    gap: 7px;
+}
 
-            <span>⌂</span>
 
-            <small>
-                Home
-            </small>
+.board-count strong {
+    color: var(--champagne-light);
 
-        </a>
+    font-size: 1.7rem;
 
+    font-weight: 500;
+}
 
-        <a href="exhibitors.html">
 
-            <span>◎</span>
+.board-count span {
+    color: var(--muted);
 
-            <small>
-                Exhibitors
-            </small>
+    font-size: .55rem;
 
-        </a>
+    letter-spacing: .08em;
 
+    text-transform: uppercase;
+}
 
-        <a href="interactions.html">
 
-            <span>↗</span>
+/* =========================================================
+   LEAD LIST
+   ========================================================= */
 
-            <small>
-                Activity
-            </small>
+.lead-list {
+    display: flex;
 
-        </a>
+    flex-direction: column;
 
+    border-left:
+        1px solid
+        var(--border);
 
-        <a href="map.html">
+    border-right:
+        1px solid
+        var(--border);
+}
 
-            <span>⌖</span>
 
-            <small>
-                Map
-            </small>
+/* =========================================================
+   LEAD CARD
+   ========================================================= */
 
-        </a>
+.lead-card {
+    position: relative;
 
+    display: grid;
 
-        <a
-            href="leads.html"
-            class="active mobile-add"
-        >
+    grid-template-columns:
+        58px
+        minmax(230px,1.25fr)
+        150px
+        155px
+        165px
+        minmax(220px,1fr)
+        170px;
 
-            <strong>
-                $
-            </strong>
+    min-height: 170px;
 
-            <small>
-                Leads
-            </small>
+    border-bottom:
+        1px solid
+        var(--border);
 
-        </a>
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.022),
+            rgba(255,255,255,.006)
+        );
 
+    transition:
+        background .18s ease;
+}
 
-    </nav>
 
+.lead-card:hover {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(166,61,102,.07),
+            rgba(255,255,255,.012)
+        );
+}
 
 
-    <!-- =====================================================
-         SCRIPTS
-         ===================================================== -->
+.lead-card.stage-proposal::before,
+.lead-card.stage-negotiation::before {
+    content: "";
 
-    <script src="js/config.js"></script>
+    position: absolute;
 
-    <script src="js/exhibitor-data.js"></script>
+    left: -1px;
 
-    <script src="js/leads.js"></script>
+    top: -1px;
 
+    bottom: -1px;
 
-</body>
+    width: 3px;
 
-</html>
+    background:
+        linear-gradient(
+            180deg,
+            var(--berry-bright),
+            var(--coral)
+        );
+}
+
+
+.lead-card.stage-won::before {
+    content: "";
+
+    position: absolute;
+
+    left: -1px;
+
+    top: -1px;
+
+    bottom: -1px;
+
+    width: 3px;
+
+    background: var(--green);
+}
+
+
+/* =========================================================
+   INDEX
+   ========================================================= */
+
+.lead-index {
+    display: grid;
+
+    place-items: center;
+
+    border-right:
+        1px solid
+        var(--border);
+
+    color:
+        rgba(215,185,134,.52);
+
+    font-size: .6rem;
+
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   COMPANY
+   ========================================================= */
+
+.lead-company {
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    padding: 22px;
+
+    border-right:
+        1px solid
+        var(--border);
+}
+
+
+.stage-pill {
+    width: fit-content;
+
+    margin-bottom: 10px;
+
+    padding:
+        5px 7px;
+
+    border:
+        1px solid
+        var(--border);
+
+    background:
+        rgba(247,239,232,.035);
+
+    color: var(--muted-light);
+
+    font-size: .44rem;
+
+    font-weight: 900;
+
+    letter-spacing: .08em;
+
+    text-transform: uppercase;
+}
+
+
+.stage-pill.proposal,
+.stage-pill.negotiation {
+    border-color:
+        rgba(241,132,111,.24);
+
+    background:
+        rgba(241,132,111,.09);
+
+    color: var(--coral-soft);
+}
+
+
+.stage-pill.won {
+    border-color:
+        rgba(125,167,139,.26);
+
+    background:
+        rgba(125,167,139,.09);
+
+    color: var(--green-light);
+}
+
+
+.stage-pill.lost {
+    opacity: .55;
+}
+
+
+.lead-company h3 {
+    margin: 0;
+
+    color: var(--cream);
+
+    font-size: 1.08rem;
+
+    line-height: 1.25;
+}
+
+
+.lead-company .booth-line {
+    margin-top: 8px;
+
+    color: var(--muted);
+
+    font-size: .61rem;
+}
+
+
+.lead-company .booth-line strong {
+    color: var(--champagne-light);
+}
+
+
+/* =========================================================
+   DATA COLUMN
+   ========================================================= */
+
+.lead-column {
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 18px;
+
+    border-right:
+        1px solid
+        var(--border);
+}
+
+
+.lead-label {
+    color: var(--muted);
+
+    font-size: .45rem;
+
+    font-weight: 900;
+
+    letter-spacing: .09em;
+
+    text-transform: uppercase;
+}
+
+
+.lead-column strong {
+    color: var(--soft-cream);
+
+    font-size: .73rem;
+}
+
+
+.lead-column small {
+    color: var(--muted);
+
+    font-size: .57rem;
+
+    line-height: 1.45;
+}
+
+
+/* =========================================================
+   VALUE
+   ========================================================= */
+
+.lead-value strong {
+    color: var(--champagne-light);
+
+    font-size: .95rem;
+}
+
+
+.probability-track {
+    width: 100%;
+
+    height: 4px;
+
+    overflow: hidden;
+
+    background:
+        rgba(255,255,255,.05);
+}
+
+
+.probability-fill {
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--berry),
+            var(--coral)
+        );
+}
+
+
+/* =========================================================
+   FOLLOW-UP
+   ========================================================= */
+
+.lead-followup.due strong {
+    color: var(--coral-soft);
+}
+
+
+/* =========================================================
+   NEXT ACTION
+   ========================================================= */
+
+.lead-next-action p {
+    margin: 0;
+
+    color: var(--muted-light);
+
+    font-size: .67rem;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.lead-actions {
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+.lead-action {
+    flex: 1;
+
+    min-height: 36px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding:
+        0 14px;
+
+    border: none;
+
+    border-bottom:
+        1px solid
+        var(--border);
+
+    background: transparent;
+
+    color: var(--muted-light);
+
+    cursor: pointer;
+
+    font-size: .56rem;
+
+    font-weight: 800;
+}
+
+
+.lead-action:last-child {
+    border-bottom: none;
+}
+
+
+.lead-action:hover {
+    background:
+        rgba(255,255,255,.04);
+
+    color: var(--cream);
+}
+
+
+.lead-action.won {
+    color: var(--green-light);
+}
+
+
+.lead-action.lost,
+.lead-action.delete {
+    color: var(--coral-soft);
+}
+
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.leads-empty {
+    min-height: 360px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    justify-content: center;
+
+    padding: 45px;
+
+    border-bottom:
+        1px solid
+        var(--border);
+}
+
+
+.leads-empty span {
+    color: var(--coral-soft);
+
+    font-size: .52rem;
+
+    font-weight: 900;
+
+    letter-spacing: .13em;
+
+    text-transform: uppercase;
+}
+
+
+.leads-empty h3 {
+    margin:
+        10px 0 0;
+
+    color: var(--cream);
+
+    font-size: 1.55rem;
+}
+
+
+.leads-empty p {
+    max-width: 520px;
+
+    margin:
+        12px 0 22px;
+
+    color: var(--muted);
+
+    font-size: .77rem;
+
+    line-height: 1.65;
+}
+
+
+.leads-empty button {
+    padding:
+        13px 17px;
+
+    border: none;
+
+    background: var(--cream);
+
+    color: #171311;
+
+    cursor: pointer;
+
+    font-size: .6rem;
+
+    font-weight: 900;
+
+    letter-spacing: .07em;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   OVERLAY
+   ========================================================= */
+
+.lead-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1900;
+
+    background:
+        rgba(7,6,6,.72);
+
+    opacity: 0;
+
+    backdrop-filter:
+        blur(5px);
+
+    transition:
+        opacity .2s ease;
+}
+
+
+.lead-overlay.open {
+    opacity: 1;
+}
+
+
+/* =========================================================
+   COMPOSER
+   ========================================================= */
+
+.lead-composer {
+    position: fixed;
+
+    top: 0;
+
+    right: 0;
+
+    bottom: 0;
+
+    z-index: 2000;
+
+    width:
+        min(650px,100%);
+
+    overflow-y: auto;
+
+    background:
+        linear-gradient(
+            180deg,
+            #211b1a,
+            #151211
+        );
+
+    border-left:
+        1px solid
+        var(--border-strong);
+
+    box-shadow:
+        -30px 0 80px
+        rgba(0,0,0,.46);
+
+    transform:
+        translateX(100%);
+
+    transition:
+        transform .24s ease;
+}
+
+
+.lead-composer.open {
+    transform:
+        translateX(0);
+}
+
+
+/* =========================================================
+   COMPOSER HEADER
+   ========================================================= */
+
+.composer-header {
+    min-height: 110px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 24px;
+
+    padding:
+        25px 28px;
+
+    border-bottom:
+        1px solid
+        var(--border);
+}
+
+
+.composer-header h2 {
+    margin:
+        7px 0 0;
+
+    color: var(--cream);
+
+    font-size: 1.45rem;
+}
+
+
+.composer-close {
+    width: 44px;
+
+    height: 44px;
+
+    display: grid;
+
+    place-items: center;
+
+    border:
+        1px solid
+        var(--border);
+
+    background: transparent;
+
+    color: var(--muted-light);
+
+    cursor: pointer;
+
+    font-size: 1.5rem;
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.lead-form {
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap: 16px;
+
+    padding: 28px;
+}
+
+
+.form-group {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+
+.form-group.full,
+.composer-actions.full {
+    grid-column:
+        1 / -1;
+}
+
+
+.form-group label {
+    color: var(--muted);
+
+    font-size: .49rem;
+
+    font-weight: 900;
+
+    letter-spacing: .1em;
+
+    text-transform: uppercase;
+}
+
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+
+    border:
+        1px solid
+        var(--border);
+
+    outline: none;
+
+    background:
+        rgba(255,255,255,.025);
+
+    color: var(--cream);
+}
+
+
+.form-group input,
+.form-group select {
+    min-height: 48px;
+
+    padding:
+        0 12px;
+}
+
+
+.form-group textarea {
+    padding: 12px;
+
+    resize: vertical;
+
+    line-height: 1.55;
+}
+
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color:
+        rgba(241,132,111,.32);
+
+    box-shadow:
+        0 0 22px
+        rgba(166,61,102,.07);
+}
+
+
+.readonly-field {
+    min-height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding:
+        0 12px;
+
+    border:
+        1px solid
+        var(--border);
+
+    background:
+        rgba(215,185,134,.04);
+
+    color: var(--champagne-light);
+
+    font-size: .7rem;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   COMPOSER ACTIONS
+   ========================================================= */
+
+.composer-actions {
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1.4fr;
+
+    gap: 9px;
+
+    margin-top: 8px;
+}
+
+
+.secondary-button,
+.primary-button {
+    min-height: 54px;
+
+    border:
+        1px solid
+        var(--border);
+
+    cursor: pointer;
+
+    font-size: .63rem;
+
+    font-weight: 900;
+
+    letter-spacing: .06em;
+
+    text-transform: uppercase;
+}
+
+
+.secondary-button {
+    background: transparent;
+
+    color: var(--muted-light);
+}
+
+
+.primary-button {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding:
+        0 17px;
+
+    border-color: transparent;
+
+    background: var(--cream);
+
+    color: #171311;
+}
+
+
+/* =========================================================
+   MOBILE NAV
+   ========================================================= */
+
+.mobile-nav {
+    display: none;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1280px) {
+
+    .desktop-nav a {
+        padding:
+            0 10px;
+
+        font-size: .6rem;
+    }
+
+
+    .leads-toolbar {
+        grid-template-columns:
+            1fr
+            1fr
+            1fr;
+    }
+
+
+    .lead-search {
+        grid-column:
+            1 / -1;
+    }
+
+
+    .lead-card {
+        grid-template-columns:
+            52px
+            minmax(230px,1.2fr)
+            150px
+            150px
+            minmax(220px,1fr);
+    }
+
+
+    .lead-next-action {
+        grid-column:
+            2 / 5;
+
+        border-top:
+            1px solid
+            var(--border);
+    }
+
+
+    .lead-actions {
+        grid-column:
+            5;
+
+        grid-row:
+            1 / 3;
+    }
+
+}
+
+
+@media (max-width: 900px) {
+
+    .app-header {
+        display: flex;
+
+        min-height: 66px;
+    }
+
+
+    .brand {
+        min-width: 0;
+
+        border-right: none;
+    }
+
+
+    .brand-mark {
+        width: 64px;
+    }
+
+
+    .desktop-nav,
+    .header-action {
+        display: none;
+    }
+
+
+    .leads-page {
+        width:
+            calc(100% - 26px);
+
+        padding:
+            20px 0
+            105px;
+    }
+
+
+    .page-heading {
+        min-height: 0;
+
+        grid-template-columns:
+            1fr;
+
+        gap: 30px;
+    }
+
+
+    .primary-heading-action {
+        width: 100%;
+    }
+
+
+    .lead-metrics {
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+
+    .metric-card:nth-child(3) {
+        border-left: none;
+
+        border-top:
+            1px solid
+            var(--border);
+    }
+
+
+    .metric-card:nth-child(4) {
+        border-top:
+            1px solid
+            var(--border);
+    }
+
+
+    .leads-toolbar {
+        grid-template-columns:
+            1fr
+            1fr;
+    }
+
+
+    .lead-search {
+        grid-column:
+            1 / -1;
+    }
+
+
+    .lead-card {
+        display: block;
+    }
+
+
+    .lead-index {
+        display: none;
+    }
+
+
+    .lead-company,
+    .lead-column {
+        border-right: none;
+
+        border-bottom:
+            1px solid
+            var(--border);
+    }
+
+
+    .lead-actions {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+
+    .lead-action {
+        min-height: 50px;
+
+        border-right:
+            1px solid
+            var(--border);
+    }
+
+
+    .mobile-nav {
+        position: fixed;
+
+        z-index: 1800;
+
+        left: 0;
+
+        right: 0;
+
+        bottom: 0;
+
+        height: 72px;
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(5,1fr);
+
+        background:
+            rgba(17,16,15,.97);
+
+        backdrop-filter:
+            blur(16px);
+
+        border-top:
+            1px solid
+            var(--border);
+    }
+
+
+    .mobile-nav a {
+        position: relative;
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 4px;
+
+        color: var(--muted);
+
+        font-size: .45rem;
+
+        font-weight: 800;
+
+        text-transform: uppercase;
+    }
+
+
+    .mobile-nav a.active {
+        color: var(--coral-soft);
+    }
+
+
+    .mobile-nav > a > span {
+        font-size: 1rem;
+    }
+
+
+    .mobile-add strong {
+        position: absolute;
+
+        top: -17px;
+
+        width: 48px;
+
+        height: 48px;
+
+        display: grid;
+
+        place-items: center;
+
+        background:
+            linear-gradient(
+                145deg,
+                var(--berry),
+                var(--coral)
+            );
+
+        color: white;
+    }
+
+
+    .mobile-add small {
+        margin-top: 31px;
+    }
+
+}
+
+
+@media (max-width: 620px) {
+
+    .page-heading h1 {
+        font-size: 3.1rem;
+    }
+
+
+    .leads-toolbar {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .lead-search {
+        grid-column: auto;
+    }
+
+
+    .leads-toolbar select {
+        width: 100%;
+    }
+
+
+    .lead-board-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+
+    .lead-form {
+        grid-template-columns:
+            1fr;
+
+        padding:
+            22px 18px;
+    }
+
+
+    .form-group.full,
+    .composer-actions.full {
+        grid-column: auto;
+    }
+
+
+    .composer-actions {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .lead-actions {
+        grid-template-columns:
+            1fr;
+    }
+
+}
