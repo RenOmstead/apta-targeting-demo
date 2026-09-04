@@ -2,8 +2,9 @@
    APTA 2026 TEAM HUB
    NORTHSTAR TRANSIT SOLUTIONS
 
-   EXHIBITOR DIRECTORY
-   Demo / Portfolio Version
+   EXHIBITORS PAGE
+   Uses shared data from:
+   js/exhibitor-data.js
    ========================================================= */
 
 
@@ -12,158 +13,21 @@
    ========================================================= */
 
 let exhibitors = [];
-
+let filteredExhibitors = [];
 let selectedExhibitor = null;
 
 let currentView = "grid";
 
 
-
 /* =========================================================
-   DEMO DATA
-
-   Temporary.
-
-   Later we will replace this array with the complete
-   APTA exhibitor database from Supabase.
+   STORAGE KEYS
    ========================================================= */
 
-const demoExhibitors = [
+const TARGET_STORAGE_KEY =
+    "northstar_apta_targets";
 
-    {
-        id: 1,
-        company_name: "Apex Rail Technologies",
-        booth_number: "1801",
-        category: "Rail Technology",
-        description:
-            "Develops digital monitoring, diagnostics and onboard technology for modern passenger rail systems.",
-        website:
-            "https://example.com"
-    },
-
-    {
-        id: 2,
-        company_name: "Lumina Transit Systems",
-        booth_number: "2145",
-        category: "Transit Technology",
-        description:
-            "Provides connected transit technology, passenger information systems and intelligent fleet solutions.",
-        website:
-            "https://example.com"
-    },
-
-    {
-        id: 3,
-        company_name: "Meridian Mobility",
-        booth_number: "1334",
-        category: "Mobility",
-        description:
-            "Designs transportation technology supporting connected mobility, fleet operations and passenger experience.",
-        website:
-            "https://example.com"
-    },
-
-    {
-        id: 4,
-        company_name: "Forge Infrastructure Group",
-        booth_number: "2418",
-        category: "Engineering",
-        description:
-            "Engineering and infrastructure organization supporting complex transportation systems and modernization programs.",
-        website:
-            "https://example.com"
-    },
-
-    {
-        id: 5,
-        company_name: "Arc Signal Technologies",
-        booth_number: "3106",
-        category: "Signals & Communications",
-        description:
-            "Develops signaling, communications and control technology for rail and public transportation networks.",
-        website:
-            "https://example.com"
-    },
-
-    {
-        id: 6,
-        company_name: "Vela Passenger Systems",
-        booth_number: "1722",
-        category: "Passenger Systems",
-        description:
-            "Creates digital passenger-information, onboard communication and transit experience platforms.",
-        website:
-            "https://example.com"
-    },
-
-    {
-        id: 7,
-        company_name: "Monarch Rolling Stock",
-        booth_number: "2607",
-        category: "Rolling Stock",
-        description:
-            "Supplies components, engineering services and lifecycle support for passenger rail vehicle programs.",
-        website:
-            "https://example.com"
-    },
-
-    {
-        id: 8,
-        company_name: "Ember Fleet Analytics",
-        booth_number: "2214",
-        category: "Data & Analytics",
-        description:
-            "Provides fleet intelligence, predictive analytics and operational dashboards for transportation organizations.",
-        website:
-            "https://example.com"
-    },
-
-    {
-        id: 9,
-        company_name: "Solace Engineering",
-        booth_number: "1517",
-        category: "Engineering",
-        description:
-            "Transportation engineering firm specializing in system integration, documentation and infrastructure programs.",
-        website:
-            "https://example.com"
-    },
-
-    {
-        id: 10,
-        company_name: "NovaFare Technologies",
-        booth_number: "2820",
-        category: "Fare Collection",
-        description:
-            "Develops modern fare collection, payment and account-based ticketing systems for transit agencies.",
-        website:
-            "https://example.com"
-    },
-
-    {
-        id: 11,
-        company_name: "Cinder Transit Manufacturing",
-        booth_number: "1938",
-        category: "Manufacturing",
-        description:
-            "Manufactures equipment and specialized components for rail and public transportation applications.",
-        website:
-            "https://example.com"
-    },
-
-    {
-        id: 12,
-        company_name: "Aurelia Communications",
-        booth_number: "2341",
-        category: "Signals & Communications",
-        description:
-            "Provides wireless communications, network infrastructure and connected-system technology for transit environments.",
-        website:
-            "https://example.com"
-    }
-
-];
-
+const RESEARCH_STORAGE_KEY =
+    "northstar_apta_research";
 
 
 /* =========================================================
@@ -176,56 +40,82 @@ document.addEventListener(
 );
 
 
-
 async function initializeExhibitors() {
-
-    bindControls();
-
-    setDatabaseStatus(
-        "Loading exhibitor intelligence..."
-    );
 
     await loadExhibitors();
 
+    bindControls();
+
     populateCategoryFilter();
 
-    updateMetrics();
-
-    renderExhibitors();
-
-    setDatabaseStatus(
-        `${exhibitors.length} exhibitors loaded · Demo workspace active`
-    );
-
-
-    /*
-       Allows another page to link directly to an exhibitor:
-
-       exhibitors.html?id=4
-    */
+    applyFilters();
 
     openExhibitorFromURL();
+
+    updatePageMetrics();
+
+    setStatus(
+        `${exhibitors.length} APTA exhibitor records loaded`
+    );
 
 }
 
 
-
 /* =========================================================
-   LOAD DATA
-
-   For now:
-   loads demo exhibitors.
-
-   Later:
-   replace this function with Supabase.
+   LOAD SHARED EXHIBITOR DATA
    ========================================================= */
 
 async function loadExhibitors() {
 
-    exhibitors = [...demoExhibitors];
+    if (
+        !window.APTA_EXHIBITORS ||
+        !Array.isArray(
+            window.APTA_EXHIBITORS
+        )
+    ) {
+
+        console.error(
+            "APTA exhibitor data did not load."
+        );
+
+        exhibitors = [];
+
+        return;
+    }
+
+
+    exhibitors =
+        window.APTA_EXHIBITORS.map(
+            (exhibitor, index) => ({
+
+                id:
+                    exhibitor.id ||
+                    `${exhibitor.booth_number}-${index}`,
+
+                company_name:
+                    exhibitor.company_name ||
+                    "Unknown Exhibitor",
+
+                booth_number:
+                    exhibitor.booth_number ||
+                    "",
+
+                category:
+                    exhibitor.category ||
+                    "",
+
+                description:
+                    exhibitor.description ||
+                    "",
+
+                website:
+                    exhibitor.website ||
+                    ""
+
+            })
+        );
 
 }
-
 
 
 /* =========================================================
@@ -234,77 +124,695 @@ async function loadExhibitors() {
 
 function bindControls() {
 
-    const search =
-        document.getElementById(
+    document
+        .getElementById(
             "exhibitorSearch"
+        )
+        ?.addEventListener(
+            "input",
+            applyFilters
         );
 
-    const categoryFilter =
-        document.getElementById(
+
+    document
+        .getElementById(
             "categoryFilter"
+        )
+        ?.addEventListener(
+            "change",
+            applyFilters
         );
 
-    const targetFilter =
-        document.getElementById(
+
+    document
+        .getElementById(
             "targetFilter"
+        )
+        ?.addEventListener(
+            "change",
+            applyFilters
         );
 
-    const sortFilter =
-        document.getElementById(
+
+    document
+        .getElementById(
             "sortFilter"
+        )
+        ?.addEventListener(
+            "change",
+            applyFilters
         );
 
-    const gridButton =
-        document.getElementById(
+
+    document
+        .getElementById(
             "gridViewButton"
+        )
+        ?.addEventListener(
+            "click",
+            () => setView("grid")
         );
 
-    const listButton =
-        document.getElementById(
+
+    document
+        .getElementById(
             "listViewButton"
+        )
+        ?.addEventListener(
+            "click",
+            () => setView("list")
         );
 
 
-    search?.addEventListener(
-        "input",
-        renderExhibitors
+    document
+        .getElementById(
+            "drawerCloseButton"
+        )
+        ?.addEventListener(
+            "click",
+            closeDrawer
+        );
+
+
+    document
+        .getElementById(
+            "drawerOverlay"
+        )
+        ?.addEventListener(
+            "click",
+            closeDrawer
+        );
+
+
+    document
+        .getElementById(
+            "drawerTargetButton"
+        )
+        ?.addEventListener(
+            "click",
+            toggleSelectedTarget
+        );
+
+
+    document
+        .getElementById(
+            "saveResearchButton"
+        )
+        ?.addEventListener(
+            "click",
+            saveSelectedResearch
+        );
+
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key ===
+                "Escape"
+            ) {
+
+                closeDrawer();
+
+            }
+
+        }
     );
-
-
-    categoryFilter?.addEventListener(
-        "change",
-        renderExhibitors
-    );
-
-
-    targetFilter?.addEventListener(
-        "change",
-        renderExhibitors
-    );
-
-
-    sortFilter?.addEventListener(
-        "change",
-        renderExhibitors
-    );
-
-
-    gridButton?.addEventListener(
-        "click",
-        () => setView("grid")
-    );
-
-
-    listButton?.addEventListener(
-        "click",
-        () => setView("list")
-    );
-
-
-    bindDrawer();
 
 }
 
+
+/* =========================================================
+   FILTERS
+   ========================================================= */
+
+function applyFilters() {
+
+    const search =
+        (
+            document
+                .getElementById(
+                    "exhibitorSearch"
+                )
+                ?.value ||
+            ""
+        )
+            .trim()
+            .toLowerCase();
+
+
+    const category =
+        document
+            .getElementById(
+                "categoryFilter"
+            )
+            ?.value ||
+        "";
+
+
+    const targetFilter =
+        document
+            .getElementById(
+                "targetFilter"
+            )
+            ?.value ||
+        "";
+
+
+    const sort =
+        document
+            .getElementById(
+                "sortFilter"
+            )
+            ?.value ||
+        "company-asc";
+
+
+    filteredExhibitors =
+        exhibitors.filter(
+            exhibitor => {
+
+                const searchable =
+                    [
+                        exhibitor.company_name,
+                        exhibitor.booth_number,
+                        exhibitor.category,
+                        exhibitor.description
+                    ]
+                        .join(" ")
+                        .toLowerCase();
+
+
+                const matchesSearch =
+                    !search ||
+                    searchable.includes(
+                        search
+                    );
+
+
+                const matchesCategory =
+                    !category ||
+                    exhibitor.category ===
+                    category;
+
+
+                const targeted =
+                    isTargeted(
+                        exhibitor.id
+                    );
+
+
+                let matchesTarget =
+                    true;
+
+
+                if (
+                    targetFilter ===
+                    "targets"
+                ) {
+
+                    matchesTarget =
+                        targeted;
+
+                }
+
+
+                if (
+                    targetFilter ===
+                    "not-targets"
+                ) {
+
+                    matchesTarget =
+                        !targeted;
+
+                }
+
+
+                return (
+                    matchesSearch &&
+                    matchesCategory &&
+                    matchesTarget
+                );
+
+            }
+        );
+
+
+    sortExhibitors(
+        filteredExhibitors,
+        sort
+    );
+
+
+    renderExhibitors();
+
+    updatePageMetrics();
+
+}
+
+
+/* =========================================================
+   SORTING
+   ========================================================= */
+
+function sortExhibitors(
+    list,
+    sort
+) {
+
+    list.sort(
+        (a, b) => {
+
+            switch (sort) {
+
+                case "company-desc":
+
+                    return (
+                        b.company_name
+                            .localeCompare(
+                                a.company_name
+                            )
+                    );
+
+
+                case "booth-asc":
+
+                    return (
+                        compareBooths(
+                            a.booth_number,
+                            b.booth_number
+                        )
+                    );
+
+
+                case "booth-desc":
+
+                    return (
+                        compareBooths(
+                            b.booth_number,
+                            a.booth_number
+                        )
+                    );
+
+
+                case "targets-first":
+
+                    return (
+                        Number(
+                            isTargeted(
+                                b.id
+                            )
+                        )
+                        -
+                        Number(
+                            isTargeted(
+                                a.id
+                            )
+                        )
+                    );
+
+
+                case "company-asc":
+                default:
+
+                    return (
+                        a.company_name
+                            .localeCompare(
+                                b.company_name
+                            )
+                    );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   BOOTH SORT HELPER
+   ========================================================= */
+
+function compareBooths(
+    a,
+    b
+) {
+
+    const aNumber =
+        parseInt(
+            String(a)
+                .replace(
+                    /\D/g,
+                    ""
+                ),
+            10
+        );
+
+
+    const bNumber =
+        parseInt(
+            String(b)
+                .replace(
+                    /\D/g,
+                    ""
+                ),
+            10
+        );
+
+
+    if (
+        Number.isNaN(aNumber) &&
+        Number.isNaN(bNumber)
+    ) {
+
+        return (
+            String(a)
+                .localeCompare(
+                    String(b)
+                )
+        );
+
+    }
+
+
+    if (
+        Number.isNaN(aNumber)
+    ) {
+
+        return 1;
+
+    }
+
+
+    if (
+        Number.isNaN(bNumber)
+    ) {
+
+        return -1;
+
+    }
+
+
+    return (
+        aNumber -
+        bNumber
+    );
+
+}
+
+
+/* =========================================================
+   RENDER EXHIBITORS
+   ========================================================= */
+
+function renderExhibitors() {
+
+    const container =
+        document.getElementById(
+            "exhibitorGrid"
+        );
+
+
+    if (!container) {
+
+        console.error(
+            'Missing element with id="exhibitorGrid".'
+        );
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        "";
+
+
+    container.classList.toggle(
+        "list-view",
+        currentView === "list"
+    );
+
+
+    if (
+        !filteredExhibitors.length
+    ) {
+
+        container.innerHTML = `
+
+            <div class="empty-state">
+
+                <span>NO MATCHES</span>
+
+                <h3>
+                    No exhibitors found.
+                </h3>
+
+                <p>
+                    Try changing your search or filters.
+                </p>
+
+            </div>
+
+        `;
+
+
+        return;
+
+    }
+
+
+    const fragment =
+        document.createDocumentFragment();
+
+
+    filteredExhibitors.forEach(
+        exhibitor => {
+
+            fragment.appendChild(
+                createExhibitorCard(
+                    exhibitor
+                )
+            );
+
+        }
+    );
+
+
+    container.appendChild(
+        fragment
+    );
+
+}
+
+
+/* =========================================================
+   CREATE EXHIBITOR CARD
+   ========================================================= */
+
+function createExhibitorCard(
+    exhibitor
+) {
+
+    const article =
+        document.createElement(
+            "article"
+        );
+
+
+    article.className =
+        "exhibitor-card";
+
+
+    article.dataset.id =
+        exhibitor.id;
+
+
+    const targeted =
+        isTargeted(
+            exhibitor.id
+        );
+
+
+    if (targeted) {
+
+        article.classList.add(
+            "is-target"
+        );
+
+    }
+
+
+    const category =
+        exhibitor.category ||
+        "APTA Exhibitor";
+
+
+    const description =
+        exhibitor.description ||
+        "Public exhibitor profile information is being added.";
+
+
+    article.innerHTML = `
+
+        <div class="card-top">
+
+            <div class="company-mark">
+
+                ${
+                    escapeHTML(
+                        getInitials(
+                            exhibitor.company_name
+                        )
+                    )
+                }
+
+            </div>
+
+
+            ${
+                targeted
+                ?
+                `
+
+                    <span class="target-badge">
+
+                        NORTHSTAR TARGET
+
+                    </span>
+
+                `
+                :
+                ""
+            }
+
+        </div>
+
+
+        <div class="card-body">
+
+            <span class="card-category">
+
+                ${
+                    escapeHTML(
+                        category
+                    )
+                }
+
+            </span>
+
+
+            <h3>
+
+                ${
+                    escapeHTML(
+                        exhibitor.company_name
+                    )
+                }
+
+            </h3>
+
+
+            <div class="booth-line">
+
+                Booth
+
+                <strong>
+
+                    ${
+                        escapeHTML(
+                            exhibitor.booth_number ||
+                            "—"
+                        )
+                    }
+
+                </strong>
+
+            </div>
+
+
+            <p>
+
+                ${
+                    escapeHTML(
+                        description
+                    )
+                }
+
+            </p>
+
+        </div>
+
+
+        <div class="card-footer">
+
+            <span>
+                View profile
+            </span>
+
+            <strong>
+                →
+            </strong>
+
+        </div>
+
+    `;
+
+
+    article.addEventListener(
+        "click",
+        () => {
+
+            openExhibitorDrawer(
+                exhibitor.id
+            );
+
+        }
+    );
+
+
+    return article;
+
+}
+
+
+/* =========================================================
+   GRID / LIST VIEW
+   ========================================================= */
+
+function setView(
+    view
+) {
+
+    currentView =
+        view;
+
+
+    document
+        .getElementById(
+            "gridViewButton"
+        )
+        ?.classList.toggle(
+            "active",
+            view === "grid"
+        );
+
+
+    document
+        .getElementById(
+            "listViewButton"
+        )
+        ?.classList.toggle(
+            "active",
+            view === "list"
+        );
+
+
+    renderExhibitors();
+
+}
 
 
 /* =========================================================
@@ -324,22 +832,31 @@ function populateCategoryFilter() {
     }
 
 
-    const categories = [
-        ...new Set(
-            exhibitors
-                .map(
-                    exhibitor =>
-                        exhibitor.category
-                )
-                .filter(Boolean)
-        )
-    ];
+    while (
+        select.options.length >
+        1
+    ) {
+
+        select.remove(1);
+
+    }
 
 
-    categories.sort(
-        (a, b) =>
-            a.localeCompare(b)
-    );
+    const categories =
+        [
+            ...new Set(
+                exhibitors
+                    .map(
+                        exhibitor =>
+                            exhibitor.category
+                    )
+                    .filter(Boolean)
+            )
+        ]
+            .sort(
+                (a, b) =>
+                    a.localeCompare(b)
+            );
 
 
     categories.forEach(
@@ -350,10 +867,14 @@ function populateCategoryFilter() {
                     "option"
                 );
 
-            option.value = category;
+
+            option.value =
+                category;
+
 
             option.textContent =
                 category;
+
 
             select.appendChild(
                 option
@@ -363,684 +884,6 @@ function populateCategoryFilter() {
     );
 
 }
-
-
-
-/* =========================================================
-   FILTER EXHIBITORS
-   ========================================================= */
-
-function getFilteredExhibitors() {
-
-    const search =
-        (
-            document
-                .getElementById(
-                    "exhibitorSearch"
-                )
-                ?.value || ""
-        )
-            .trim()
-            .toLowerCase();
-
-
-    const category =
-        document
-            .getElementById(
-                "categoryFilter"
-            )
-            ?.value || "";
-
-
-    const targetFilter =
-        document
-            .getElementById(
-                "targetFilter"
-            )
-            ?.value || "";
-
-
-    const sort =
-        document
-            .getElementById(
-                "sortFilter"
-            )
-            ?.value ||
-        "company-asc";
-
-
-    let filtered =
-        exhibitors.filter(
-            exhibitor => {
-
-                const research =
-                    getResearch(
-                        exhibitor.id
-                    );
-
-
-                const searchableText = [
-
-                    exhibitor.company_name,
-
-                    exhibitor.booth_number,
-
-                    exhibitor.category,
-
-                    exhibitor.description,
-
-                    research.notes
-
-                ]
-                    .filter(Boolean)
-                    .join(" ")
-                    .toLowerCase();
-
-
-                if (
-                    search &&
-                    !searchableText.includes(
-                        search
-                    )
-                ) {
-                    return false;
-                }
-
-
-                if (
-                    category &&
-                    exhibitor.category !==
-                    category
-                ) {
-                    return false;
-                }
-
-
-                const targeted =
-                    isTargeted(
-                        exhibitor.id
-                    );
-
-
-                if (
-                    targetFilter ===
-                    "target" &&
-                    !targeted
-                ) {
-                    return false;
-                }
-
-
-                if (
-                    targetFilter ===
-                    "not-target" &&
-                    targeted
-                ) {
-                    return false;
-                }
-
-
-                return true;
-
-            }
-        );
-
-
-    filtered =
-        sortExhibitors(
-            filtered,
-            sort
-        );
-
-
-    return filtered;
-
-}
-
-
-
-/* =========================================================
-   SORT
-   ========================================================= */
-
-function sortExhibitors(
-    list,
-    sort
-) {
-
-    const sorted =
-        [...list];
-
-
-    if (
-        sort ===
-        "company-desc"
-    ) {
-
-        sorted.sort(
-            (a, b) =>
-                b.company_name
-                    .localeCompare(
-                        a.company_name
-                    )
-        );
-
-    }
-
-
-    else if (
-        sort ===
-        "booth"
-    ) {
-
-        sorted.sort(
-            (a, b) =>
-                naturalCompare(
-                    a.booth_number,
-                    b.booth_number
-                )
-        );
-
-    }
-
-
-    else if (
-        sort ===
-        "targets"
-    ) {
-
-        sorted.sort(
-            (a, b) => {
-
-                const aTarget =
-                    isTargeted(a.id)
-                        ? 1
-                        : 0;
-
-                const bTarget =
-                    isTargeted(b.id)
-                        ? 1
-                        : 0;
-
-
-                if (
-                    bTarget !==
-                    aTarget
-                ) {
-
-                    return (
-                        bTarget -
-                        aTarget
-                    );
-
-                }
-
-
-                return (
-                    a.company_name
-                        .localeCompare(
-                            b.company_name
-                        )
-                );
-
-            }
-        );
-
-    }
-
-
-    else {
-
-        sorted.sort(
-            (a, b) =>
-                a.company_name
-                    .localeCompare(
-                        b.company_name
-                    )
-        );
-
-    }
-
-
-    return sorted;
-
-}
-
-
-
-/* =========================================================
-   RENDER
-   ========================================================= */
-
-function renderExhibitors() {
-
-    const grid =
-        document.getElementById(
-            "exhibitorGrid"
-        );
-
-
-    if (!grid) {
-        return;
-    }
-
-
-    const filtered =
-        getFilteredExhibitors();
-
-
-    updateResultCount(
-        filtered.length
-    );
-
-
-    grid.innerHTML = "";
-
-
-    if (
-        currentView ===
-        "list"
-    ) {
-
-        grid.classList.add(
-            "list-view"
-        );
-
-    }
-
-    else {
-
-        grid.classList.remove(
-            "list-view"
-        );
-
-    }
-
-
-    if (
-        filtered.length === 0
-    ) {
-
-        grid.innerHTML = `
-
-            <div class="directory-empty">
-
-                <span class="empty-number">
-                    0
-                </span>
-
-                <div>
-
-                    <strong>
-                        No exhibitors found.
-                    </strong>
-
-                    <p>
-                        Try changing your search
-                        terms or directory filters.
-                    </p>
-
-                </div>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    filtered.forEach(
-        exhibitor => {
-
-            grid.appendChild(
-                createExhibitorCard(
-                    exhibitor
-                )
-            );
-
-        }
-    );
-
-}
-
-
-
-/* =========================================================
-   CREATE CARD
-   ========================================================= */
-
-function createExhibitorCard(
-    exhibitor
-) {
-
-    const targeted =
-        isTargeted(
-            exhibitor.id
-        );
-
-
-    const research =
-        getResearch(
-            exhibitor.id
-        );
-
-
-    const card =
-        document.createElement(
-            "article"
-        );
-
-
-    card.className =
-        "exhibitor-card";
-
-
-    if (targeted) {
-
-        card.classList.add(
-            "targeted"
-        );
-
-    }
-
-
-    card.dataset.id =
-        exhibitor.id;
-
-
-    const initial =
-        getCompanyInitial(
-            exhibitor.company_name
-        );
-
-
-    const description =
-        exhibitor.description ||
-        "Company information is being researched.";
-
-
-    card.innerHTML = `
-
-        <div class="exhibitor-card-top">
-
-            <div class="exhibitor-card-mark">
-                ${escapeHTML(initial)}
-            </div>
-
-            ${
-                targeted
-                    ?
-                    `
-                    <span class="exhibitor-target-badge">
-                        Northstar Target
-                    </span>
-                    `
-                    :
-                    ""
-            }
-
-        </div>
-
-
-        <div class="exhibitor-card-body">
-
-            <span class="exhibitor-card-category">
-
-                ${
-                    escapeHTML(
-                        exhibitor.category ||
-                        "APTA Exhibitor"
-                    )
-                }
-
-                ${
-                    research.fit
-                        ?
-                        ` · ${formatFit(research.fit)}`
-                        :
-                        ""
-                }
-
-            </span>
-
-
-            <h3>
-                ${
-                    escapeHTML(
-                        exhibitor.company_name
-                    )
-                }
-            </h3>
-
-
-            <p class="exhibitor-card-description">
-
-                ${
-                    escapeHTML(
-                        description
-                    )
-                }
-
-            </p>
-
-        </div>
-
-
-        <div class="exhibitor-card-footer">
-
-            <span class="exhibitor-booth">
-                Booth ${
-                    escapeHTML(
-                        exhibitor.booth_number ||
-                        "—"
-                    )
-                }
-            </span>
-
-            <span class="exhibitor-card-action">
-                →
-            </span>
-
-        </div>
-
-    `;
-
-
-    card.addEventListener(
-        "click",
-        () => {
-
-            openExhibitorDrawer(
-                exhibitor.id
-            );
-
-        }
-    );
-
-
-    return card;
-
-}
-
-
-
-/* =========================================================
-   METRICS
-   ========================================================= */
-
-function updateMetrics() {
-
-    const total =
-        exhibitors.length;
-
-
-    const targetCount =
-        exhibitors.filter(
-            exhibitor =>
-                isTargeted(
-                    exhibitor.id
-                )
-        ).length;
-
-
-    setText(
-        "exhibitorTotal",
-        total
-    );
-
-
-    setText(
-        "targetTotal",
-        targetCount
-    );
-
-}
-
-
-
-/* =========================================================
-   RESULT COUNT
-   ========================================================= */
-
-function updateResultCount(
-    count
-) {
-
-    const text =
-        count === 1
-            ? "1 company"
-            : `${count} companies`;
-
-
-    setText(
-        "resultCount",
-        text
-    );
-
-}
-
-
-
-/* =========================================================
-   GRID / LIST VIEW
-   ========================================================= */
-
-function setView(
-    view
-) {
-
-    currentView =
-        view;
-
-
-    const gridButton =
-        document.getElementById(
-            "gridViewButton"
-        );
-
-
-    const listButton =
-        document.getElementById(
-            "listViewButton"
-        );
-
-
-    gridButton
-        ?.classList
-        .toggle(
-            "active",
-            view === "grid"
-        );
-
-
-    listButton
-        ?.classList
-        .toggle(
-            "active",
-            view === "list"
-        );
-
-
-    renderExhibitors();
-
-}
-
-
-
-/* =========================================================
-   DRAWER
-   ========================================================= */
-
-function bindDrawer() {
-
-    const overlay =
-        document.getElementById(
-            "drawerOverlay"
-        );
-
-
-    const close =
-        document.getElementById(
-            "drawerClose"
-        );
-
-
-    const targetButton =
-        document.getElementById(
-            "drawerTargetButton"
-        );
-
-
-    const saveResearch =
-        document.getElementById(
-            "saveResearchButton"
-        );
-
-
-    overlay?.addEventListener(
-        "click",
-        closeExhibitorDrawer
-    );
-
-
-    close?.addEventListener(
-        "click",
-        closeExhibitorDrawer
-    );
-
-
-    targetButton?.addEventListener(
-        "click",
-        toggleSelectedTarget
-    );
-
-
-    saveResearch?.addEventListener(
-        "click",
-        saveSelectedResearch
-    );
-
-
-    document.addEventListener(
-        "keydown",
-        event => {
-
-            if (
-                event.key ===
-                "Escape"
-            ) {
-
-                closeExhibitorDrawer();
-
-            }
-
-        }
-    );
-
-}
-
 
 
 /* =========================================================
@@ -1054,8 +897,12 @@ function openExhibitorDrawer(
     const exhibitor =
         exhibitors.find(
             item =>
-                String(item.id) ===
-                String(exhibitorId)
+                String(
+                    item.id
+                ) ===
+                String(
+                    exhibitorId
+                )
         );
 
 
@@ -1068,21 +915,176 @@ function openExhibitorDrawer(
         exhibitor;
 
 
-    const research =
-        getResearch(
-            exhibitor.id
+    updateDrawer();
+
+
+    const overlay =
+        document.getElementById(
+            "drawerOverlay"
         );
 
 
-    setText(
-        "drawerCompany",
-        exhibitor.company_name
+    const drawer =
+        document.getElementById(
+            "exhibitorDrawer"
+        );
+
+
+    if (overlay) {
+
+        overlay.hidden =
+            false;
+
+    }
+
+
+    if (drawer) {
+
+        drawer.hidden =
+            false;
+
+
+        requestAnimationFrame(
+            () => {
+
+                drawer.classList.add(
+                    "open"
+                );
+
+                overlay?.classList.add(
+                    "open"
+                );
+
+            }
+        );
+
+    }
+
+
+    document.body.classList.add(
+        "drawer-open"
     );
+
+
+    const url =
+        new URL(
+            window.location.href
+        );
+
+
+    url.searchParams.set(
+        "id",
+        exhibitor.id
+    );
+
+
+    window.history.replaceState(
+        {},
+        "",
+        url
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE DRAWER
+   ========================================================= */
+
+function closeDrawer() {
+
+    const overlay =
+        document.getElementById(
+            "drawerOverlay"
+        );
+
+
+    const drawer =
+        document.getElementById(
+            "exhibitorDrawer"
+        );
+
+
+    drawer?.classList.remove(
+        "open"
+    );
+
+
+    overlay?.classList.remove(
+        "open"
+    );
+
+
+    document.body.classList.remove(
+        "drawer-open"
+    );
+
+
+    setTimeout(
+        () => {
+
+            if (drawer) {
+
+                drawer.hidden =
+                    true;
+
+            }
+
+
+            if (overlay) {
+
+                overlay.hidden =
+                    true;
+
+            }
+
+        },
+        180
+    );
+
+
+    selectedExhibitor =
+        null;
+
+
+    const url =
+        new URL(
+            window.location.href
+        );
+
+
+    url.searchParams.delete(
+        "id"
+    );
+
+
+    window.history.replaceState(
+        {},
+        "",
+        url
+    );
+
+}
+
+
+/* =========================================================
+   UPDATE DRAWER
+   ========================================================= */
+
+function updateDrawer() {
+
+    if (!selectedExhibitor) {
+        return;
+    }
+
+
+    const exhibitor =
+        selectedExhibitor;
 
 
     setText(
         "drawerCompanyMark",
-        getCompanyInitial(
+        getInitials(
             exhibitor.company_name
         )
     );
@@ -1096,24 +1098,14 @@ function openExhibitorDrawer(
 
 
     setText(
-        "drawerBooth",
-        `Booth ${
-            exhibitor.booth_number ||
-            "—"
-        }`
+        "drawerCompanyName",
+        exhibitor.company_name
     );
 
 
     setText(
-        "drawerBoothDetail",
+        "drawerBoothNumber",
         exhibitor.booth_number ||
-        "—"
-    );
-
-
-    setText(
-        "drawerCategoryDetail",
-        exhibitor.category ||
         "—"
     );
 
@@ -1121,7 +1113,7 @@ function openExhibitorDrawer(
     setText(
         "drawerDescription",
         exhibitor.description ||
-        "Company information is currently being researched."
+        "Public exhibitor profile information is being added."
     );
 
 
@@ -1131,61 +1123,35 @@ function openExhibitorDrawer(
         );
 
 
-    if (
-        website &&
-        exhibitor.website
-    ) {
+    if (website) {
 
-        website.href =
-            exhibitor.website;
+        if (
+            exhibitor.website
+        ) {
 
-        website.textContent =
-            cleanWebsite(
-                exhibitor.website
-            );
-
-        website.style.pointerEvents =
-            "auto";
-
-    }
-
-    else if (website) {
-
-        website.href = "#";
-
-        website.textContent =
-            "Not available";
-
-        website.style.pointerEvents =
-            "none";
-
-    }
+            website.href =
+                normalizeWebsite(
+                    exhibitor.website
+                );
 
 
-    const fit =
-        document.getElementById(
-            "drawerFit"
-        );
+            website.textContent =
+                cleanWebsiteLabel(
+                    exhibitor.website
+                );
 
 
-    if (fit) {
+            website.hidden =
+                false;
 
-        fit.value =
-            research.fit || "";
+        }
 
-    }
+        else {
 
+            website.hidden =
+                true;
 
-    const notes =
-        document.getElementById(
-            "drawerNotes"
-        );
-
-
-    if (notes) {
-
-        notes.value =
-            research.notes || "";
+        }
 
     }
 
@@ -1193,124 +1159,93 @@ function openExhibitorDrawer(
     updateDrawerTargetState();
 
 
-    const mapLink =
-        document.getElementById(
-            "drawerMapLink"
-        );
+    loadResearchIntoDrawer();
 
 
-    if (mapLink) {
-
-        mapLink.href =
-            `map.html?id=${
-                encodeURIComponent(
-                    exhibitor.id
-                )
-            }`;
-
-    }
-
-
-    const interactionLink =
-        document.getElementById(
-            "drawerInteractionLink"
-        );
-
-
-    if (
-        interactionLink
-    ) {
-
-        interactionLink.href =
-            `interactions.html?exhibitor=${
-                encodeURIComponent(
-                    exhibitor.id
-                )
-            }`;
-
-    }
-
-
-    document
-        .getElementById(
-            "drawerOverlay"
-        )
-        ?.classList
-        .add("open");
-
-
-    const drawer =
-        document.getElementById(
-            "exhibitorDrawer"
-        );
-
-
-    drawer
-        ?.classList
-        .add("open");
-
-
-    drawer?.setAttribute(
-        "aria-hidden",
-        "false"
-    );
-
-
-    document.body.style.overflow =
-        "hidden";
+    updateDrawerLinks();
 
 }
-
 
 
 /* =========================================================
-   CLOSE DRAWER
+   DRAWER TARGET STATE
    ========================================================= */
 
-function closeExhibitorDrawer() {
+function updateDrawerTargetState() {
 
-    document
-        .getElementById(
-            "drawerOverlay"
-        )
-        ?.classList
-        .remove("open");
+    if (!selectedExhibitor) {
+        return;
+    }
 
 
-    const drawer =
-        document.getElementById(
-            "exhibitorDrawer"
+    const targeted =
+        isTargeted(
+            selectedExhibitor.id
         );
 
 
-    drawer
-        ?.classList
-        .remove("open");
+    const badge =
+        document.getElementById(
+            "drawerTargetBadge"
+        );
 
 
-    drawer?.setAttribute(
-        "aria-hidden",
-        "true"
-    );
+    if (badge) {
+
+        badge.hidden =
+            !targeted;
+
+    }
 
 
-    document.body.style.overflow =
-        "";
+    const button =
+        document.getElementById(
+            "drawerTargetButton"
+        );
 
 
-    selectedExhibitor =
-        null;
+    if (button) {
+
+        button.classList.toggle(
+            "active",
+            targeted
+        );
+
+
+        button.innerHTML =
+            targeted
+            ?
+            `
+
+                <span>
+                    Remove from Northstar Targets
+                </span>
+
+                <strong>
+                    ×
+                </strong>
+
+            `
+            :
+            `
+
+                <span>
+                    Add to Northstar Targets
+                </span>
+
+                <strong>
+                    +
+                </strong>
+
+            `;
+
+    }
 
 }
-
 
 
 /* =========================================================
    TARGET STORAGE
-
-   Temporary localStorage implementation.
-
-   Later this becomes the Supabase "targets" table.
    ========================================================= */
 
 function getTargets() {
@@ -1319,13 +1254,15 @@ function getTargets() {
 
         const stored =
             localStorage.getItem(
-                "northstar_apta_targets"
+                TARGET_STORAGE_KEY
             );
 
 
         return stored
             ?
-            JSON.parse(stored)
+            JSON.parse(
+                stored
+            )
             :
             [];
 
@@ -1334,7 +1271,7 @@ function getTargets() {
     catch (error) {
 
         console.error(
-            "Could not read targets:",
+            "Unable to read target storage:",
             error
         );
 
@@ -1346,22 +1283,26 @@ function getTargets() {
 }
 
 
+/* =========================================================
+   SAVE TARGETS
+   ========================================================= */
 
 function saveTargets(
     targets
 ) {
 
     localStorage.setItem(
-        "northstar_apta_targets",
-        JSON.stringify(targets)
+        TARGET_STORAGE_KEY,
+        JSON.stringify(
+            targets
+        )
     );
 
 }
 
 
-
 /* =========================================================
-   CHECK TARGET
+   IS TARGETED
    ========================================================= */
 
 function isTargeted(
@@ -1381,16 +1322,13 @@ function isTargeted(
 }
 
 
-
 /* =========================================================
    TOGGLE TARGET
    ========================================================= */
 
 function toggleSelectedTarget() {
 
-    if (
-        !selectedExhibitor
-    ) {
+    if (!selectedExhibitor) {
         return;
     }
 
@@ -1412,7 +1350,8 @@ function toggleSelectedTarget() {
 
 
     if (
-        index >= 0
+        index >=
+        0
     ) {
 
         targets.splice(
@@ -1421,13 +1360,8 @@ function toggleSelectedTarget() {
         );
 
 
-        saveTargets(
-            targets
-        );
-
-
-        showTemporaryStatus(
-            `${selectedExhibitor.company_name} removed from Northstar targets`
+        setStatus(
+            `${selectedExhibitor.company_name} removed from targets`
         );
 
     }
@@ -1441,6 +1375,9 @@ function toggleSelectedTarget() {
 
             exhibitor_id:
                 selectedExhibitor.id,
+
+            booth_number:
+                selectedExhibitor.booth_number,
 
             priority:
                 "medium",
@@ -1464,115 +1401,44 @@ function toggleSelectedTarget() {
         });
 
 
-        saveTargets(
-            targets
-        );
-
-
-        showTemporaryStatus(
-            `${selectedExhibitor.company_name} added to Northstar targets`
+        setStatus(
+            `${selectedExhibitor.company_name} added to targets`
         );
 
     }
+
+
+    saveTargets(
+        targets
+    );
 
 
     updateDrawerTargetState();
 
-    updateMetrics();
-
-    renderExhibitors();
+    applyFilters();
 
 }
-
-
-
-/* =========================================================
-   DRAWER TARGET STATE
-   ========================================================= */
-
-function updateDrawerTargetState() {
-
-    if (
-        !selectedExhibitor
-    ) {
-        return;
-    }
-
-
-    const targeted =
-        isTargeted(
-            selectedExhibitor.id
-        );
-
-
-    const button =
-        document.getElementById(
-            "drawerTargetButton"
-        );
-
-
-    const status =
-        document.getElementById(
-            "drawerTargetStatus"
-        );
-
-
-    if (button) {
-
-        button.classList.toggle(
-            "active",
-            targeted
-        );
-
-
-        button.innerHTML =
-            targeted
-                ?
-                `
-                    <span>✓</span>
-                    Northstar Target
-                `
-                :
-                `
-                    <span>+</span>
-                    Add to Northstar Targets
-                `;
-
-    }
-
-
-    if (status) {
-
-        status.textContent =
-            targeted
-                ?
-                "Northstar Target"
-                :
-                "Not Targeted";
-
-    }
-
-}
-
 
 
 /* =========================================================
    RESEARCH STORAGE
    ========================================================= */
 
-function getAllResearch() {
+function getResearch() {
 
     try {
 
         const stored =
             localStorage.getItem(
-                "northstar_apta_research"
+                RESEARCH_STORAGE_KEY
             );
 
 
         return stored
             ?
-            JSON.parse(stored)
+            JSON.parse(
+                stored
+            )
             :
             {};
 
@@ -1581,7 +1447,7 @@ function getAllResearch() {
     catch (error) {
 
         console.error(
-            "Could not read research:",
+            "Unable to read research storage:",
             error
         );
 
@@ -1593,29 +1459,59 @@ function getAllResearch() {
 }
 
 
+/* =========================================================
+   LOAD RESEARCH INTO DRAWER
+   ========================================================= */
 
-function getResearch(
-    exhibitorId
-) {
+function loadResearchIntoDrawer() {
+
+    if (!selectedExhibitor) {
+        return;
+    }
+
 
     const research =
-        getAllResearch();
+        getResearch();
 
 
-    return (
+    const saved =
         research[
-            String(
-                exhibitorId
-            )
+            selectedExhibitor.id
         ]
-        || {
-            fit: "",
-            notes: ""
-        }
-    );
+        ||
+        {};
+
+
+    const notes =
+        document.getElementById(
+            "researchNotes"
+        );
+
+
+    if (notes) {
+
+        notes.value =
+            saved.notes ||
+            "";
+
+    }
+
+
+    const fit =
+        document.getElementById(
+            "potentialFit"
+        );
+
+
+    if (fit) {
+
+        fit.value =
+            saved.potential_fit ||
+            "";
+
+    }
 
 }
-
 
 
 /* =========================================================
@@ -1624,42 +1520,51 @@ function getResearch(
 
 function saveSelectedResearch() {
 
-    if (
-        !selectedExhibitor
-    ) {
+    if (!selectedExhibitor) {
         return;
     }
 
 
-    const fit =
-        document
-            .getElementById(
-                "drawerFit"
-            )
-            ?.value || "";
-
-
     const notes =
-        document
-            .getElementById(
-                "drawerNotes"
-            )
-            ?.value
-            ?.trim() || "";
+        document.getElementById(
+            "researchNotes"
+        )
+        ?.value
+        ?.trim()
+        ||
+        "";
+
+
+    const fit =
+        document.getElementById(
+            "potentialFit"
+        )
+        ?.value
+        ?.trim()
+        ||
+        "";
 
 
     const research =
-        getAllResearch();
+        getResearch();
 
 
     research[
-        String(
-            selectedExhibitor.id
-        )
+        selectedExhibitor.id
     ] = {
 
-        fit,
-        notes,
+        exhibitor_id:
+            selectedExhibitor.id,
+
+        booth_number:
+            selectedExhibitor.booth_number,
+
+        notes:
+
+            notes,
+
+        potential_fit:
+            fit,
 
         updated_at:
             new Date()
@@ -1669,7 +1574,7 @@ function saveSelectedResearch() {
 
 
     localStorage.setItem(
-        "northstar_apta_research",
+        RESEARCH_STORAGE_KEY,
         JSON.stringify(
             research
         )
@@ -1677,12 +1582,11 @@ function saveSelectedResearch() {
 
 
     /*
-       If someone saves research,
-       automatically make the company
-       a target.
+       Researching an exhibitor usually means
+       Northstar wants to keep track of them.
 
-       This makes the workflow feel
-       natural.
+       If they are not already a target,
+       automatically add them.
     */
 
     if (
@@ -1703,12 +1607,11 @@ function saveSelectedResearch() {
             exhibitor_id:
                 selectedExhibitor.id,
 
+            booth_number:
+                selectedExhibitor.booth_number,
+
             priority:
-                fit === "high"
-                    ?
-                    "high"
-                    :
-                    "medium",
+                "medium",
 
             visited:
                 false,
@@ -1738,21 +1641,67 @@ function saveSelectedResearch() {
 
     updateDrawerTargetState();
 
-    updateMetrics();
-
-    renderExhibitors();
+    applyFilters();
 
 
-    showTemporaryStatus(
+    setStatus(
         `Research saved for ${selectedExhibitor.company_name}`
     );
 
 }
 
 
+/* =========================================================
+   DRAWER LINKS
+   ========================================================= */
+
+function updateDrawerLinks() {
+
+    if (!selectedExhibitor) {
+        return;
+    }
+
+
+    const mapLink =
+        document.getElementById(
+            "drawerMapLink"
+        );
+
+
+    if (mapLink) {
+
+        mapLink.href =
+            `map.html?id=${
+                encodeURIComponent(
+                    selectedExhibitor.id
+                )
+            }`;
+
+    }
+
+
+    const interactionLink =
+        document.getElementById(
+            "drawerInteractionLink"
+        );
+
+
+    if (interactionLink) {
+
+        interactionLink.href =
+            `interactions.html?exhibitor=${
+                encodeURIComponent(
+                    selectedExhibitor.id
+                )
+            }`;
+
+    }
+
+}
+
 
 /* =========================================================
-   OPEN EXHIBITOR FROM URL
+   OPEN FROM URL
    ========================================================= */
 
 function openExhibitorFromURL() {
@@ -1764,7 +1713,9 @@ function openExhibitorFromURL() {
 
 
     const id =
-        params.get("id");
+        params.get(
+            "id"
+        );
 
 
     if (!id) {
@@ -1772,57 +1723,80 @@ function openExhibitorFromURL() {
     }
 
 
+    const exhibitor =
+        exhibitors.find(
+            item =>
+                String(
+                    item.id
+                ) ===
+                String(
+                    id
+                )
+        );
+
+
+    if (!exhibitor) {
+        return;
+    }
+
+
     openExhibitorDrawer(
-        id
+        exhibitor.id
     );
 
 }
 
+
+/* =========================================================
+   PAGE METRICS
+   ========================================================= */
+
+function updatePageMetrics() {
+
+    setText(
+        "exhibitorCount",
+        exhibitors.length
+    );
+
+
+    setText(
+        "targetCount",
+        getTargets().length
+    );
+
+
+    setText(
+        "visibleCount",
+        filteredExhibitors.length
+    );
+
+}
 
 
 /* =========================================================
    STATUS
    ========================================================= */
 
-function setDatabaseStatus(
+let statusTimer = null;
+
+
+function setStatus(
     message
 ) {
 
-    const status =
+    const element =
         document.getElementById(
             "databaseStatus"
         );
 
 
-    if (status) {
-
-        status.textContent =
-            message;
-
+    if (!element) {
+        return;
     }
 
-}
 
-
-
-/* =========================================================
-   TEMPORARY STATUS MESSAGE
-   ========================================================= */
-
-let statusTimer = null;
-
-
-function showTemporaryStatus(
-    message
-) {
-
-    const original =
-        `${exhibitors.length} exhibitors loaded · Demo workspace active`;
-
-
-    setDatabaseStatus(
-        message
-    );
+    element.textContent =
+        message;
 
 
     clearTimeout(
@@ -1834,20 +1808,18 @@ function showTemporaryStatus(
         setTimeout(
             () => {
 
-                setDatabaseStatus(
-                    original
-                );
+                element.textContent =
+                    `${exhibitors.length} APTA exhibitor records loaded`;
 
             },
-            2800
+            3500
         );
 
 }
 
 
-
 /* =========================================================
-   UTILITIES
+   HELPERS
    ========================================================= */
 
 function setText(
@@ -1871,103 +1843,99 @@ function setText(
 }
 
 
+/* =========================================================
+   INITIALS
+   ========================================================= */
 
-function getCompanyInitial(
+function getInitials(
     company
 ) {
 
     if (!company) {
-        return "—";
+
+        return "?";
+
     }
 
 
-    return company
-        .trim()
-        .charAt(0)
+    const words =
+        company
+            .replace(
+                /[^A-Za-z0-9\s]/g,
+                " "
+            )
+            .trim()
+            .split(
+                /\s+/
+            )
+            .filter(Boolean);
+
+
+    if (
+        words.length ===
+        1
+    ) {
+
+        return words[0]
+            .slice(
+                0,
+                2
+            )
+            .toUpperCase();
+
+    }
+
+
+    return (
+        words[0][0] +
+        words[1][0]
+    )
         .toUpperCase();
 
 }
 
 
-
-function formatFit(
-    fit
-) {
-
-    const labels = {
-
-        high:
-            "High Fit",
-
-        medium:
-            "Medium Fit",
-
-        low:
-            "Low Fit"
-
-    };
-
-
-    return (
-        labels[fit]
-        || ""
-    );
-
-}
-
-
-
 /* =========================================================
-   NATURAL BOOTH SORTING
+   WEBSITE HELPERS
    ========================================================= */
 
-function naturalCompare(
-    a,
-    b
-) {
-
-    return String(
-        a || ""
-    ).localeCompare(
-        String(
-            b || ""
-        ),
-        undefined,
-        {
-            numeric: true,
-            sensitivity: "base"
-        }
-    );
-
-}
-
-
-
-/* =========================================================
-   CLEAN WEBSITE DISPLAY
-   ========================================================= */
-
-function cleanWebsite(
+function normalizeWebsite(
     website
 ) {
 
-    if (!website) {
-        return "—";
+    if (
+        /^https?:\/\//i
+            .test(
+                website
+            )
+    ) {
+
+        return website;
+
     }
 
 
-    return website
+    return (
+        "https://" +
+        website
+    );
 
+}
+
+
+function cleanWebsiteLabel(
+    website
+) {
+
+    return website
         .replace(
             /^https?:\/\//i,
             ""
         )
-
         .replace(
             /^www\./i,
             ""
         )
-
         .replace(
             /\/$/,
             ""
@@ -1976,19 +1944,21 @@ function cleanWebsite(
 }
 
 
-
 /* =========================================================
-   ID GENERATOR
+   GENERATE ID
    ========================================================= */
 
 function generateId() {
 
     if (
         window.crypto &&
-        crypto.randomUUID
+        typeof crypto.randomUUID ===
+        "function"
     ) {
 
-        return crypto.randomUUID();
+        return (
+            crypto.randomUUID()
+        );
 
     }
 
@@ -2006,7 +1976,6 @@ function generateId() {
 }
 
 
-
 /* =========================================================
    ESCAPE HTML
    ========================================================= */
@@ -2018,22 +1987,27 @@ function escapeHTML(
     return String(
         value ?? ""
     )
+
         .replace(
             /&/g,
             "&amp;"
         )
+
         .replace(
             /</g,
             "&lt;"
         )
+
         .replace(
             />/g,
             "&gt;"
         )
+
         .replace(
             /"/g,
             "&quot;"
         )
+
         .replace(
             /'/g,
             "&#039;"
