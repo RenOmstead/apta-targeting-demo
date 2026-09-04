@@ -1,1 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Interactions | APTA 2026 Team Hub
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="css/global.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/interactions.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="app-header">
+
+
+        <a
+            class="brand"
+            href="index.html"
+        >
+
+            <div class="brand-mark">
+                NTS
+            </div>
+
+
+            <div class="brand-copy">
+
+                <span>
+                    APTA 2026
+                </span>
+
+                <strong>
+                    Team Hub
+                </strong>
+
+            </div>
+
+        </a>
+
+
+        <nav class="desktop-nav">
+
+            <a href="index.html">
+                Dashboard
+            </a>
+
+            <a href="exhibitors.html">
+                Exhibitors
+            </a>
+
+            <a href="map.html">
+                Expo Map
+            </a>
+
+            <a href="targets.html">
+                Targets
+            </a>
+
+            <a
+                href="interactions.html"
+                class="active"
+            >
+                Interactions
+            </a>
+
+            <a href="leads.html">
+                Leads
+            </a>
+
+        </nav>
+
+
+        <button
+            id="headerLogInteractionButton"
+            class="header-action button-reset"
+            type="button"
+        >
+            Log Interaction
+        </button>
+
+
+    </header>
+
+
+
+    <!-- =====================================================
+         PAGE
+         ===================================================== -->
+
+    <main class="interactions-page">
+
+
+        <!-- =================================================
+             DEMO NOTICE
+             ================================================= -->
+
+        <div class="demo-notice">
+
+            Portfolio Demo · Northstar Transit Solutions is a fictional company
+
+        </div>
+
+
+
+        <!-- =================================================
+             HERO
+             ================================================= -->
+
+        <section class="page-heading">
+
+
+            <div class="heading-copy">
+
+                <span class="kicker">
+                    CONVERSATION INTELLIGENCE
+                </span>
+
+
+                <h1>
+                    Capture what
+                    <em>actually happened.</em>
+                </h1>
+
+
+                <p>
+
+                    Record booth conversations, meeting outcomes,
+                    follow-up needs, and useful context while the
+                    interaction is still fresh.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="heading-action">
+
+                <button
+                    id="heroLogInteractionButton"
+                    class="primary-heading-action"
+                    type="button"
+                >
+
+                    <span>
+                        Log interaction
+                    </span>
+
+                    <strong>
+                        +
+                    </strong>
+
+                </button>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             METRICS
+             ================================================= -->
+
+        <section class="interaction-metrics">
+
+
+            <article class="metric-card">
+
+                <span class="metric-label">
+                    Interactions
+                </span>
+
+                <strong id="metricTotal">
+                    0
+                </strong>
+
+                <small>
+                    conversations logged
+                </small>
+
+            </article>
+
+
+            <article class="metric-card">
+
+                <span class="metric-label">
+                    Today
+                </span>
+
+                <strong id="metricToday">
+                    0
+                </strong>
+
+                <small>
+                    logged today
+                </small>
+
+            </article>
+
+
+            <article class="metric-card followup-metric">
+
+                <span class="metric-label">
+                    Follow-Up
+                </span>
+
+                <strong id="metricFollowUp">
+                    0
+                </strong>
+
+                <small>
+                    actions required
+                </small>
+
+            </article>
+
+
+            <article class="metric-card">
+
+                <span class="metric-label">
+                    Positive
+                </span>
+
+                <strong id="metricPositive">
+                    0
+                </strong>
+
+                <small>
+                    strong outcomes
+                </small>
+
+            </article>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             STATUS
+             ================================================= -->
+
+        <div class="status-bar">
+
+            <span id="databaseStatus">
+                Loading interaction history...
+            </span>
+
+        </div>
+
+
+
+        <!-- =================================================
+             TOOLBAR
+             ================================================= -->
+
+        <section class="interactions-toolbar">
+
+
+            <label class="interaction-search">
+
+                <span>
+                    ⌕
+                </span>
+
+                <input
+                    id="interactionSearch"
+                    type="search"
+                    placeholder="Search company, booth, contact, notes..."
+                    autocomplete="off"
+                >
+
+            </label>
+
+
+
+            <select id="typeFilter">
+
+                <option value="">
+                    All interaction types
+                </option>
+
+                <option value="booth-conversation">
+                    Booth Conversation
+                </option>
+
+                <option value="scheduled-meeting">
+                    Scheduled Meeting
+                </option>
+
+                <option value="networking">
+                    Networking
+                </option>
+
+                <option value="demo">
+                    Demo
+                </option>
+
+                <option value="email">
+                    Email
+                </option>
+
+                <option value="phone">
+                    Phone
+                </option>
+
+                <option value="other">
+                    Other
+                </option>
+
+            </select>
+
+
+
+            <select id="outcomeFilter">
+
+                <option value="">
+                    All outcomes
+                </option>
+
+                <option value="strong-interest">
+                    Strong Interest
+                </option>
+
+                <option value="promising">
+                    Promising
+                </option>
+
+                <option value="informational">
+                    Informational
+                </option>
+
+                <option value="not-a-fit">
+                    Not a Fit
+                </option>
+
+                <option value="follow-up">
+                    Follow-Up Needed
+                </option>
+
+            </select>
+
+
+
+            <select id="followUpFilter">
+
+                <option value="">
+                    All follow-up states
+                </option>
+
+                <option value="required">
+                    Follow-Up Required
+                </option>
+
+                <option value="not-required">
+                    No Follow-Up
+                </option>
+
+            </select>
+
+
+
+            <select id="interactionSort">
+
+                <option value="newest">
+                    Newest First
+                </option>
+
+                <option value="oldest">
+                    Oldest First
+                </option>
+
+                <option value="company">
+                    Company A–Z
+                </option>
+
+                <option value="follow-up">
+                    Follow-Up First
+                </option>
+
+            </select>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             LIST HEADER
+             ================================================= -->
+
+        <section class="interaction-board-header">
+
+
+            <div>
+
+                <span class="section-kicker">
+                    INTERACTION HISTORY
+                </span>
+
+                <h2>
+                    Conference conversations
+                </h2>
+
+            </div>
+
+
+            <div class="board-count">
+
+                <strong id="visibleInteractionCount">
+                    0
+                </strong>
+
+                <span>
+                    visible
+                </span>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             INTERACTION LIST
+             ================================================= -->
+
+        <section
+            id="interactionList"
+            class="interaction-list"
+        >
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         COMPOSER OVERLAY
+         ===================================================== -->
+
+    <div
+        id="interactionOverlay"
+        class="interaction-overlay"
+        hidden
+    >
+    </div>
+
+
+
+    <!-- =====================================================
+         COMPOSER
+         ===================================================== -->
+
+    <aside
+        id="interactionComposer"
+        class="interaction-composer"
+        hidden
+        aria-label="Log interaction"
+    >
+
+
+        <div class="composer-header">
+
+            <div>
+
+                <span class="section-kicker">
+                    CONVERSATION RECORD
+                </span>
+
+                <h2 id="composerTitle">
+                    Log interaction
+                </h2>
+
+            </div>
+
+
+            <button
+                id="composerCloseButton"
+                class="composer-close"
+                type="button"
+                aria-label="Close interaction form"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+
+        <form
+            id="interactionForm"
+            class="interaction-form"
+        >
+
+
+            <input
+                id="editingInteractionId"
+                type="hidden"
+            >
+
+
+
+            <!-- =============================================
+                 EXHIBITOR
+                 ============================================= -->
+
+            <div class="form-group full">
+
+                <label for="interactionExhibitor">
+                    Exhibitor
+                </label>
+
+                <select
+                    id="interactionExhibitor"
+                    required
+                >
+
+                    <option value="">
+                        Select exhibitor
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 BOOTH DISPLAY
+                 ============================================= -->
+
+            <div class="form-group">
+
+                <label>
+                    Booth
+                </label>
+
+                <div
+                    id="interactionBoothDisplay"
+                    class="readonly-field"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 TYPE
+                 ============================================= -->
+
+            <div class="form-group">
+
+                <label for="interactionType">
+                    Interaction Type
+                </label>
+
+                <select
+                    id="interactionType"
+                    required
+                >
+
+                    <option value="booth-conversation">
+                        Booth Conversation
+                    </option>
+
+                    <option value="scheduled-meeting">
+                        Scheduled Meeting
+                    </option>
+
+                    <option value="networking">
+                        Networking
+                    </option>
+
+                    <option value="demo">
+                        Demo
+                    </option>
+
+                    <option value="email">
+                        Email
+                    </option>
+
+                    <option value="phone">
+                        Phone
+                    </option>
+
+                    <option value="other">
+                        Other
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 CONTACT
+                 ============================================= -->
+
+            <div class="form-group">
+
+                <label for="contactName">
+                    Contact Name
+                </label>
+
+                <input
+                    id="contactName"
+                    type="text"
+                    placeholder="Person you spoke with"
+                >
+
+            </div>
+
+
+
+            <!-- =============================================
+                 TITLE
+                 ============================================= -->
+
+            <div class="form-group">
+
+                <label for="contactTitle">
+                    Contact Title
+                </label>
+
+                <input
+                    id="contactTitle"
+                    type="text"
+                    placeholder="Role or department"
+                >
+
+            </div>
+
+
+
+            <!-- =============================================
+                 DATE
+                 ============================================= -->
+
+            <div class="form-group">
+
+                <label for="interactionDate">
+                    Date
+                </label>
+
+                <input
+                    id="interactionDate"
+                    type="date"
+                    required
+                >
+
+            </div>
+
+
+
+            <!-- =============================================
+                 TIME
+                 ============================================= -->
+
+            <div class="form-group">
+
+                <label for="interactionTime">
+                    Time
+                </label>
+
+                <input
+                    id="interactionTime"
+                    type="time"
+                >
+
+            </div>
+
+
+
+            <!-- =============================================
+                 OUTCOME
+                 ============================================= -->
+
+            <div class="form-group full">
+
+                <label for="interactionOutcome">
+                    Outcome
+                </label>
+
+                <select
+                    id="interactionOutcome"
+                    required
+                >
+
+                    <option value="informational">
+                        Informational
+                    </option>
+
+                    <option value="promising">
+                        Promising
+                    </option>
+
+                    <option value="strong-interest">
+                        Strong Interest
+                    </option>
+
+                    <option value="follow-up">
+                        Follow-Up Needed
+                    </option>
+
+                    <option value="not-a-fit">
+                        Not a Fit
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 NOTES
+                 ============================================= -->
+
+            <div class="form-group full">
+
+                <label for="interactionNotes">
+                    Conversation Notes
+                </label>
+
+                <textarea
+                    id="interactionNotes"
+                    rows="6"
+                    placeholder="What did you discuss? What matters? What should the team remember?"
+                ></textarea>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 FOLLOW-UP
+                 ============================================= -->
+
+            <div class="followup-block full">
+
+
+                <label class="check-row">
+
+                    <input
+                        id="followUpRequired"
+                        type="checkbox"
+                    >
+
+                    <span class="custom-check">
+                        ✓
+                    </span>
+
+                    <span>
+
+                        <strong>
+                            Follow-up required
+                        </strong>
+
+                        <small>
+                            Keep this conversation active after the expo
+                        </small>
+
+                    </span>
+
+                </label>
+
+
+
+                <div
+                    id="followUpDateWrap"
+                    class="followup-date-wrap"
+                    hidden
+                >
+
+                    <label for="followUpDate">
+                        Follow-Up Date
+                    </label>
+
+                    <input
+                        id="followUpDate"
+                        type="date"
+                    >
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =============================================
+                 ACTIONS
+                 ============================================= -->
+
+            <div class="composer-actions full">
+
+
+                <button
+                    id="cancelInteractionButton"
+                    class="secondary-button"
+                    type="button"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    class="primary-button"
+                    type="submit"
+                >
+
+                    <span id="saveInteractionLabel">
+                        Save Interaction
+                    </span>
+
+                    <strong>
+                        →
+                    </strong>
+
+                </button>
+
+
+            </div>
+
+
+        </form>
+
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MOBILE NAV
+         ===================================================== -->
+
+    <nav class="mobile-nav">
+
+
+        <a href="index.html">
+
+            <span>⌂</span>
+
+            <small>
+                Home
+            </small>
+
+        </a>
+
+
+        <a href="exhibitors.html">
+
+            <span>◎</span>
+
+            <small>
+                Exhibitors
+            </small>
+
+        </a>
+
+
+        <a
+            href="interactions.html"
+            class="mobile-add active"
+        >
+
+            <strong>
+                +
+            </strong>
+
+            <small>
+                Log
+            </small>
+
+        </a>
+
+
+        <a href="map.html">
+
+            <span>⌖</span>
+
+            <small>
+                Map
+            </small>
+
+        </a>
+
+
+        <a href="targets.html">
+
+            <span>★</span>
+
+            <small>
+                Targets
+            </small>
+
+        </a>
+
+
+    </nav>
+
+
+
+    <!-- =====================================================
+         SCRIPTS
+         ===================================================== -->
+
+    <script src="js/config.js"></script>
+
+    <script src="js/exhibitor-data.js"></script>
+
+    <script src="js/interactions.js"></script>
+
+
+</body>
+
+</html>
