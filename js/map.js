@@ -2,9 +2,11 @@
    APTA 2026 TEAM HUB
    NORTHSTAR TRANSIT SOLUTIONS
 
-   MAP PAGE
-   Uses shared exhibitor data from:
-   js/exhibitor-data.js
+   MAP PAGE LOGIC
+
+   Requires:
+   - js/exhibitor-data.js
+   - js/floor-layout.js
    ========================================================= */
 
 
@@ -13,12 +15,16 @@
    ========================================================= */
 
 let exhibitors = [];
+let floorLayout = [];
+
 let selectedExhibitor = null;
+let selectedBoothNumber = null;
+
 let visibleBoothCount = 0;
 
 
 /* =========================================================
-   STORAGE
+   STORAGE KEYS
    ========================================================= */
 
 const TARGET_STORAGE_KEY =
@@ -112,555 +118,6 @@ const FLOOR_AISLES = [
 
 
 /* =========================================================
-   FLOOR GEOMETRY
-
-   IMPORTANT:
-   This array only describes map placement.
-
-   Company names come from:
-   window.APTA_EXHIBITORS
-
-   width/depth are 10-foot modules.
-
-   1 x 1 = 10' x 10'
-   2 x 1 = 20' x 10'
-   3 x 1 = 30' x 10'
-
-   This geometry is still being reconstructed and expanded.
-   ========================================================= */
-
-const APTA_FLOOR_LAYOUT = [
-
-    /* ===================== 3100 AREA ===================== */
-
-    {
-        booth_number: "3175",
-        x: 11,
-        y: 4,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "3176",
-        x: 12,
-        y: 4,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "3181",
-        x: 14,
-        y: 4,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "3182",
-        x: 15,
-        y: 4,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "3185",
-        x: 17,
-        y: 4,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "3186",
-        x: 18,
-        y: 4,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "3100",
-        x: 20,
-        y: 2,
-        width: 4,
-        depth: 3
-    },
-
-    {
-        booth_number: "3103",
-        x: 25,
-        y: 3,
-        width: 2,
-        depth: 2
-    },
-
-    {
-        booth_number: "3106",
-        x: 28,
-        y: 4,
-        width: 2,
-        depth: 1
-    },
-
-
-    /* ===================== 3400 AREA ===================== */
-
-    {
-        booth_number: "3402",
-        x: 12,
-        y: 12,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "3405",
-        x: 13,
-        y: 12,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "3406",
-        x: 14,
-        y: 12,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "3408",
-        x: 15,
-        y: 12,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "3420",
-        x: 18,
-        y: 11,
-        width: 3,
-        depth: 2
-    },
-
-    {
-        booth_number: "3425",
-        x: 22,
-        y: 12,
-        width: 2,
-        depth: 1
-    },
-
-
-    /* ===================== CENTER AREA =================== */
-
-    {
-        booth_number: "3500",
-        x: 5,
-        y: 15,
-        width: 4,
-        depth: 3
-    },
-
-    {
-        booth_number: "3600",
-        x: 11,
-        y: 15,
-        width: 3,
-        depth: 4
-    },
-
-    {
-        booth_number: "3700",
-        x: 16,
-        y: 15,
-        width: 5,
-        depth: 3
-    },
-
-    {
-        booth_number: "3800",
-        x: 24,
-        y: 15,
-        width: 4,
-        depth: 4
-    },
-
-    {
-        booth_number: "3900",
-        x: 31,
-        y: 15,
-        width: 5,
-        depth: 3
-    },
-
-
-    /* ===================== 4200 AREA ===================== */
-
-    {
-        booth_number: "4210",
-        x: 30,
-        y: 20,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4212",
-        x: 31,
-        y: 20,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4217",
-        x: 33,
-        y: 20,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4220",
-        x: 35,
-        y: 20,
-        width: 2,
-        depth: 1
-    },
-
-    {
-        booth_number: "4231",
-        x: 38,
-        y: 20,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4234",
-        x: 39,
-        y: 20,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4237",
-        x: 40,
-        y: 20,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4239",
-        x: 41,
-        y: 20,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4252",
-        x: 30,
-        y: 22,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4255",
-        x: 32,
-        y: 22,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4257",
-        x: 33,
-        y: 22,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4261",
-        x: 35,
-        y: 22,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4264",
-        x: 36,
-        y: 22,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4267",
-        x: 38,
-        y: 22,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4269",
-        x: 39,
-        y: 22,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4274",
-        x: 30,
-        y: 24,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4275",
-        x: 31,
-        y: 24,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4277",
-        x: 33,
-        y: 24,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4279",
-        x: 34,
-        y: 24,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4281",
-        x: 36,
-        y: 24,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4285",
-        x: 38,
-        y: 24,
-        width: 1,
-        depth: 1
-    },
-
-
-    /* ===================== 4600 AREA ===================== */
-
-    {
-        booth_number: "4606",
-        x: 30,
-        y: 31,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4607",
-        x: 31,
-        y: 31,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4608",
-        x: 32,
-        y: 31,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4610",
-        x: 34,
-        y: 31,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4612",
-        x: 35,
-        y: 31,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4614",
-        x: 37,
-        y: 31,
-        width: 3,
-        depth: 1
-    },
-
-    {
-        booth_number: "4617",
-        x: 41,
-        y: 31,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4620",
-        x: 30,
-        y: 33,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4622",
-        x: 31,
-        y: 33,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4624",
-        x: 32,
-        y: 33,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4625",
-        x: 34,
-        y: 33,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4627",
-        x: 35,
-        y: 33,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4628",
-        x: 36,
-        y: 33,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4631",
-        x: 38,
-        y: 33,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4632",
-        x: 39,
-        y: 33,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4636",
-        x: 30,
-        y: 35,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4638",
-        x: 32,
-        y: 35,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4642",
-        x: 34,
-        y: 35,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4644",
-        x: 35,
-        y: 35,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4646",
-        x: 36,
-        y: 35,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4647",
-        x: 38,
-        y: 35,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4648",
-        x: 39,
-        y: 35,
-        width: 1,
-        depth: 1
-    },
-
-    {
-        booth_number: "4649",
-        x: 40,
-        y: 35,
-        width: 1,
-        depth: 1
-    }
-
-];
-
-
-/* =========================================================
    START
    ========================================================= */
 
@@ -672,7 +129,7 @@ document.addEventListener(
 
 function initializeMap() {
 
-    loadExhibitors();
+    loadSharedData();
 
     bindControls();
 
@@ -687,17 +144,19 @@ function initializeMap() {
     openExhibitorFromURL();
 
     setStatus(
-        `${exhibitors.length} APTA exhibitor records loaded`
+        `${exhibitors.length} exhibitors · ${floorLayout.length} mapped booths`
     );
 
 }
 
 
 /* =========================================================
-   LOAD SHARED EXHIBITOR DATA
+   LOAD SHARED DATA
    ========================================================= */
 
-function loadExhibitors() {
+function loadSharedData() {
+
+    /* ---------------- EXHIBITORS ---------------- */
 
     if (
         !window.APTA_EXHIBITORS ||
@@ -712,40 +171,96 @@ function loadExhibitors() {
 
         exhibitors = [];
 
-        return;
+    }
+
+    else {
+
+        exhibitors =
+            window.APTA_EXHIBITORS.map(
+                exhibitor => ({
+
+                    id:
+                        exhibitor.id,
+
+                    company_name:
+                        exhibitor.company_name ||
+                        "Unknown Exhibitor",
+
+                    booth_number:
+                        exhibitor.booth_number ||
+                        "",
+
+                    category:
+                        exhibitor.category ||
+                        "",
+
+                    description:
+                        exhibitor.description ||
+                        "",
+
+                    website:
+                        exhibitor.website ||
+                        ""
+
+                })
+            );
 
     }
 
 
-    exhibitors =
-        window.APTA_EXHIBITORS.map(
-            exhibitor => ({
+    /* ---------------- FLOOR LAYOUT ---------------- */
 
-                id:
-                    exhibitor.id,
+    if (
+        !window.APTA_FLOOR_LAYOUT ||
+        !Array.isArray(
+            window.APTA_FLOOR_LAYOUT
+        )
+    ) {
 
-                company_name:
-                    exhibitor.company_name ||
-                    "Unknown Exhibitor",
-
-                booth_number:
-                    exhibitor.booth_number ||
-                    "",
-
-                category:
-                    exhibitor.category ||
-                    "",
-
-                description:
-                    exhibitor.description ||
-                    "",
-
-                website:
-                    exhibitor.website ||
-                    ""
-
-            })
+        console.error(
+            "APTA floor layout data did not load."
         );
+
+        floorLayout = [];
+
+    }
+
+    else {
+
+        floorLayout =
+            window.APTA_FLOOR_LAYOUT.map(
+                booth => ({
+
+                    booth_number:
+                        String(
+                            booth.booth_number ||
+                            ""
+                        ),
+
+                    x:
+                        Number(
+                            booth.x || 0
+                        ),
+
+                    y:
+                        Number(
+                            booth.y || 0
+                        ),
+
+                    width:
+                        Number(
+                            booth.width || 1
+                        ),
+
+                    depth:
+                        Number(
+                            booth.depth || 1
+                        )
+
+                })
+            );
+
+    }
 
 }
 
@@ -920,6 +435,20 @@ function renderFloor() {
         }px`;
 
 
+    floor.style.minWidth =
+        `${
+            FLOOR_CONFIG.widthUnits *
+            unit
+        }px`;
+
+
+    floor.style.minHeight =
+        `${
+            FLOOR_CONFIG.heightUnits *
+            unit
+        }px`;
+
+
     floor.innerHTML =
         "";
 
@@ -934,20 +463,24 @@ function renderFloor() {
     );
 
 
-    APTA_FLOOR_LAYOUT.forEach(
+    floorLayout.forEach(
         layout => {
 
-            const exhibitorsAtBooth =
+            const boothExhibitors =
                 getExhibitorsByBooth(
                     layout.booth_number
                 );
 
 
-            floor.appendChild(
+            const booth =
                 createBooth(
                     layout,
-                    exhibitorsAtBooth
-                )
+                    boothExhibitors
+                );
+
+
+            floor.appendChild(
+                booth
             );
 
         }
@@ -1026,7 +559,7 @@ function renderZones(
 
 
 /* =========================================================
-   FLOOR AISLES
+   AISLES
    ========================================================= */
 
 function renderAisles(
@@ -1097,7 +630,7 @@ function renderAisles(
 
 function createBooth(
     layout,
-    exhibitorsAtBooth
+    boothExhibitors
 ) {
 
     const unit =
@@ -1139,8 +672,7 @@ function createBooth(
 
 
     const primaryExhibitor =
-        exhibitorsAtBooth[0]
-        ||
+        boothExhibitors[0] ||
         null;
 
 
@@ -1158,11 +690,10 @@ function createBooth(
 
 
     if (
-        selectedExhibitor &&
+        selectedBoothNumber &&
         String(
-            selectedExhibitor.booth_number
-        )
-        ===
+            selectedBoothNumber
+        ) ===
         String(
             layout.booth_number
         )
@@ -1243,7 +774,7 @@ function createBooth(
 
             showTooltip(
                 layout,
-                exhibitorsAtBooth,
+                boothExhibitors,
                 event
             );
 
@@ -1269,7 +800,7 @@ function createBooth(
 
 
 /* =========================================================
-   BOOTH LOOKUPS
+   EXHIBITOR LOOKUPS
    ========================================================= */
 
 function getExhibitorsByBooth(
@@ -1305,11 +836,35 @@ function getPrimaryExhibitorByBooth(
 }
 
 
+function getExhibitorById(
+    exhibitorId
+) {
+
+    return exhibitors.find(
+        exhibitor =>
+            String(
+                exhibitor.id
+            )
+            ===
+            String(
+                exhibitorId
+            )
+    )
+    ||
+    null;
+
+}
+
+
+/* =========================================================
+   FLOOR LOOKUP
+   ========================================================= */
+
 function getLayoutByBooth(
     boothNumber
 ) {
 
-    return APTA_FLOOR_LAYOUT.find(
+    return floorLayout.find(
         layout =>
             String(
                 layout.booth_number
@@ -1344,23 +899,27 @@ function selectBooth(
     }
 
 
-    const exhibitorsAtBooth =
+    const boothExhibitors =
         getExhibitorsByBooth(
             boothNumber
         );
 
 
     const primary =
-        exhibitorsAtBooth[0]
+        boothExhibitors[0]
         ||
         null;
+
+
+    selectedBoothNumber =
+        boothNumber;
 
 
     selectedExhibitor = {
 
         id:
             primary?.id ||
-            boothNumber,
+            `booth-${boothNumber}`,
 
         company_name:
             primary?.company_name ||
@@ -1382,7 +941,7 @@ function selectBooth(
             "",
 
         exhibitors_at_booth:
-            exhibitorsAtBooth,
+            boothExhibitors,
 
         layout:
             layout
@@ -1552,9 +1111,17 @@ function updateSelectedTargetState() {
 
     if (button) {
 
+        button.classList.toggle(
+            "active",
+            targeted
+        );
+
+
         button.innerHTML =
             targeted
+
             ?
+
             `
 
                 <span>
@@ -1566,7 +1133,9 @@ function updateSelectedTargetState() {
                 </b>
 
             `
+
             :
+
             `
 
                 <span>
@@ -1634,7 +1203,7 @@ function updateSelectedLinks() {
 
 
 /* =========================================================
-   FILTERS
+   FILTERING
    ========================================================= */
 
 function applyFilters() {
@@ -1814,7 +1383,7 @@ function getTargets() {
     catch (error) {
 
         console.error(
-            "Unable to read target storage:",
+            "Unable to read targets:",
             error
         );
 
@@ -1841,7 +1410,7 @@ function saveTargets(
 
 
 /* =========================================================
-   TARGET CHECK
+   TARGET CHECKS
    ========================================================= */
 
 function isTargeted(
@@ -1883,7 +1452,7 @@ function isBoothTargeted(
 
 
 /* =========================================================
-   TOGGLE SELECTED TARGET
+   TOGGLE TARGET
    ========================================================= */
 
 function toggleSelectedTarget() {
@@ -2008,15 +1577,8 @@ function renderTargetRoute() {
                 target => {
 
                     const exhibitor =
-                        exhibitors.find(
-                            item =>
-                                String(
-                                    item.id
-                                )
-                                ===
-                                String(
-                                    target.exhibitor_id
-                                )
+                        getExhibitorById(
+                            target.exhibitor_id
                         );
 
 
@@ -2039,9 +1601,7 @@ function renderTargetRoute() {
                     return {
 
                         exhibitor,
-
                         layout,
-
                         target
 
                     };
@@ -2168,9 +1728,7 @@ function renderTargetRoute() {
 
 
                 <span class="route-arrow">
-
                     →
-
                 </span>
 
             `;
@@ -2209,7 +1767,7 @@ function renderTargetRoute() {
 
 function showTooltip(
     layout,
-    exhibitorsAtBooth,
+    boothExhibitors,
     event
 ) {
 
@@ -2229,27 +1787,36 @@ function showTooltip(
 
 
     const companyNames =
-        exhibitorsAtBooth.length
+        boothExhibitors.length
+
             ?
-            exhibitorsAtBooth
+
+            boothExhibitors
                 .map(
                     exhibitor =>
                         exhibitor.company_name
                 )
                 .join(" / ")
+
             :
+
             `Booth ${layout.booth_number}`;
 
 
     setText(
         "tooltipStatus",
+
         isBoothTargeted(
             layout.booth_number
         )
-            ?
-            "NORTHSTAR TARGET"
-            :
-            "APTA EXHIBITOR"
+
+        ?
+
+        "NORTHSTAR TARGET"
+
+        :
+
+        "APTA EXHIBITOR"
     );
 
 
@@ -2328,7 +1895,8 @@ function moveTooltip(
     if (
         x +
         tooltip.offsetWidth >
-        window.innerWidth - 10
+        window.innerWidth -
+        10
     ) {
 
         x =
@@ -2342,7 +1910,8 @@ function moveTooltip(
     if (
         y +
         tooltip.offsetHeight >
-        window.innerHeight - 10
+        window.innerHeight -
+        10
     ) {
 
         y =
@@ -2398,15 +1967,8 @@ function updateMetrics() {
             target => {
 
                 const exhibitor =
-                    exhibitors.find(
-                        item =>
-                            String(
-                                item.id
-                            )
-                            ===
-                            String(
-                                target.exhibitor_id
-                            )
+                    getExhibitorById(
+                        target.exhibitor_id
                     );
 
 
@@ -2433,14 +1995,14 @@ function updateMetrics() {
 
     setText(
         "mapVisibleCount",
-        APTA_FLOOR_LAYOUT.length
+        floorLayout.length
     );
 
 }
 
 
 /* =========================================================
-   RESET MAP
+   RESET
    ========================================================= */
 
 function resetMap() {
@@ -2482,6 +2044,10 @@ function resetMap() {
         null;
 
 
+    selectedBoothNumber =
+        null;
+
+
     updateSelectedPanel();
 
     renderFloor();
@@ -2497,7 +2063,7 @@ function resetMap() {
 
 
 /* =========================================================
-   OPEN FROM URL
+   OPEN EXHIBITOR FROM URL
    ========================================================= */
 
 function openExhibitorFromURL() {
@@ -2520,15 +2086,8 @@ function openExhibitorFromURL() {
 
 
     const exhibitor =
-        exhibitors.find(
-            item =>
-                String(
-                    item.id
-                )
-                ===
-                String(
-                    id
-                )
+        getExhibitorById(
+            id
         );
 
 
@@ -2546,8 +2105,9 @@ function openExhibitorFromURL() {
     if (!layout) {
 
         setStatus(
-            `${exhibitor.company_name} is in the directory, but its floor geometry has not been mapped yet`
+            `${exhibitor.company_name} is in the directory but its floor position has not been mapped yet`
         );
+
 
         return;
 
@@ -2607,7 +2167,8 @@ function scrollToBooth(
    STATUS
    ========================================================= */
 
-let statusTimer = null;
+let statusTimer =
+    null;
 
 
 function setStatus(
@@ -2639,7 +2200,7 @@ function setStatus(
             () => {
 
                 element.textContent =
-                    `${exhibitors.length} exhibitors · ${APTA_FLOOR_LAYOUT.length} mapped booths`;
+                    `${exhibitors.length} exhibitors · ${floorLayout.length} mapped booths`;
 
             },
             3500
@@ -2682,9 +2243,7 @@ function getInitials(
 ) {
 
     if (!company) {
-
         return "?";
-
     }
 
 
@@ -2726,7 +2285,7 @@ function getInitials(
 
 
 /* =========================================================
-   SHORTEN COMPANY
+   SHORT COMPANY LABEL
    ========================================================= */
 
 function shortenCompany(
